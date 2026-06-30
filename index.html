@@ -6,21 +6,21 @@
     <title>DRCS v1.8.0 - 數位裝修指揮系統 (正式生產版)</title>
     <style>
         :root {
-            --bg-primary: #f8fafc; /* 主要明亮底色 */
-            --bg-secondary: #ffffff; /* 主要白瓷容器畫布 */
+            --bg-primary: #f8fafc; 
+            --bg-secondary: #ffffff; 
             --bg-card: #ffffff;
-            --text-main: #0f172a; /* 深碳灰 */
+            --text-main: #0f172a; 
             --text-muted: #64748b;
-            --accent: #0d9488; /* 核心 Teal 藍綠色 */
+            --accent: #0d9488; 
             --accent-hover: #0f766e;
             --accent-success: #10b981;
-            --accent-warn: #d97706; /* 琥珀橙 Amber */
+            --accent-warn: #d97706; 
             --accent-danger: #ef4444;
             --border-color: #e2e8f0;
             --highlight-bg: #f59e0b33;
             --highlight-text: #b45309;
             --layer-infra: #0d9488;
-            --layer-main: #8b5cf6; /* 優雅紫 */
+            --layer-main: #8b5cf6; 
             --layer-app: #f59e0b;
             --layer-soft: #10b981;
         }
@@ -30,9 +30,8 @@
 
         header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
         .logo-area h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: 0.5px; color: var(--text-main); }
-        .logo-area span { color: var(--accent); font-size: 0.85rem; background: #0d948812; padding: 2px 6px; border-radius: 4px; margin-left: 6px; font-family: monospace; font-weight: 700; }
+        .logo-area span { color: var(--accent); font-size: 0.85rem; background: #0d948812; padding: 2px 6px; border-radius: 4px; margin-left: 8px; font-family: monospace; font-weight: 700; }
         
-        /* Dashboard Metrics */
         .dashboard-metrics { display: flex; gap: 12px; flex-wrap: wrap; width: 100%; margin-top: 12px; }
         .metric-card { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 8px; flex: 1; min-width: 150px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
         .metric-card.interactive-card { border: 1px dashed var(--accent); cursor: pointer; transition: all 0.2s; }
@@ -45,7 +44,6 @@
 
         .sandbox-alert-bar { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 14px 20px; border-radius: 8px; margin-bottom: 20px; font-size: 0.88rem; border-left: 4px solid var(--accent); box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
 
-        /* WBS Layer Grid Matrix */
         .budget-layer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
         .layer-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; position: relative; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
         .layer-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
@@ -56,7 +54,6 @@
         .layer-card h4 { font-size: 0.92rem; font-weight: 700; margin-bottom: 8px; color: var(--text-main); }
         .layer-card-meta { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; font-family: monospace; }
 
-        /* Dynamic CRUD Control Input Panel */
         .crud-panel { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 20px; border-radius: 10px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
         .panel-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 16px; color: var(--accent); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
         .crud-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: flex-end; }
@@ -67,7 +64,6 @@
         .btn-submit { background: var(--accent); color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.85rem; transition: background 0.2s; }
         .btn-submit:hover { background: var(--accent-hover); }
 
-        /* Capsule Controls Filters Panel */
         .controls-panel { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 16px; border-radius: 10px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
         .filter-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
         .filter-scroll-wrapper { display: flex; gap: 8px; overflow-x: auto; flex-grow: 1; padding-bottom: 2px; }
@@ -80,11 +76,9 @@
         .filter-btn:hover { border-color: var(--accent); color: var(--text-main); }
         .filter-btn.active { background-color: var(--accent); color: white; border-color: var(--accent); }
 
-        /* View Content Display Control */
         .view-content { display: none; }
         .view-content.active { display: block; }
 
-        /* Kanban Layout Container */
         .kanban-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; align-items: start; }
         @media (max-width: 1200px) { .kanban-board { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 768px) { .kanban-board { grid-template-columns: 1fr; } }
@@ -94,11 +88,10 @@
         .column-header { font-size: 0.92rem; font-weight: 700; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--bg-primary); display: flex; justify-content: space-between; align-items: center; color: var(--text-main); }
         .column-count { background: var(--bg-primary); color: var(--text-muted); padding: 2px 10px; border-radius: 20px; font-size: 0.72rem; border: 1px solid var(--border-color); font-weight: 700; }
 
-        /* Card Item */
         .kanban-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; margin-bottom: 12px; cursor: grab; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.02); transition: border-color 0.15s, box-shadow 0.15s; }
         .kanban-card:hover { border-color: var(--accent); box-shadow: 0 4px 12px rgba(13, 148, 136, 0.08); }
         .card-tag { display: inline-block; font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; margin-bottom: 8px; font-weight: 700; }
-        .card-title { font-size: 0.92rem; font-weight: 700; margin-bottom: 6px; padding-right: 30px; color: var(--text-main); }
+        .card-title { font-size: 0.92rem; font-weight: 700; margin-bottom: 6px; padding-right: 30px; color: var(--text-main); cursor: pointer; }
         .card-title:hover { color: var(--accent); text-decoration: underline; }
         .card-desc { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px; line-height: 1.4; }
         .card-meta { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); border-top: 1px solid var(--bg-primary); padding-top: 8px; font-family: monospace; }
@@ -106,7 +99,6 @@
         .btn-delete { position: absolute; top: 12px; right: 12px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.9rem; font-weight: 700; }
         .btn-delete:hover { color: var(--accent-danger); }
 
-        /* Dependency Tree Visual Layout */
         .tree-container { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 24px; border-radius: 10px; font-family: monospace; line-height: 1.8; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
         .tree-node { margin-left: 24px; position: relative; padding-left: 12px; }
         .tree-node::before { content: "├──"; position: absolute; left: -16px; color: var(--border-color); }
@@ -116,7 +108,6 @@
         .tree-connector { display: inline-flex; align-items: center; gap: 4px; font-size: 0.78rem; font-weight: 600; color: #b45309; background: #f59e0b12; padding: 2px 6px; border-radius: 4px; border: 1px solid #f59e0b22; }
         .tree-connector::before { content: "🌿 "; }
 
-        /* Data Grid Table */
         .table-container { overflow-x: auto; background-color: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
         table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; color: var(--text-main); }
         th, td { padding: 14px 16px; border-bottom: 1px solid var(--border-color); }
@@ -129,17 +120,15 @@
         .pill-onsite { background: #dbeafe; color: #0369a1; }
         .pill-installed { background: #d1fae5; color: #065f46; }
 
-        /* iOS Bottom Navigation TabBar (rooms 模式核心) */
-        .ios-tabbar { position: fixed; bottom: 0; left: 0; right: 0; height: 74px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; z-index: 9999; box-shadow: 0 -2px 10px rgba(0,0,0,0.03); padding-bottom: env(safe-area-inset-bottom); }
+        .ios-tabbar { position: fixed; bottom: 0; left: 0; right: 0; height: 74px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; z-index: 9999; padding-bottom: env(safe-area-inset-bottom); box-shadow: 0 -2px 10px rgba(0,0,0,0.03); }
         .tab-item { display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; border: none; color: var(--text-muted); cursor: pointer; width: 65px; height: 100%; transition: color 0.15s; }
         .tab-item svg { width: 22px; height: 24px; margin-bottom: 3px; fill: currentColor; }
         .tab-item span { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2px; }
         .tab-item.active { color: var(--accent); }
 
-        /* System Category Badges */
-        .cat-infra { background: #f0fdfa; color: #0d9488; border: 1px solid #ccfbf1; } /* Mint / Teal */
-        .cat-living { background: #f5f3ff; color: #6d28d9; border: 1px solid #edd1ff; } /* 優雅紫 */
-        .cat-kitchen { background: #fffbeb; color: #b45309; border: 1px solid #fef3c7; } /* 琥珀橙 */
+        .cat-infra { background: #f0fdfa; color: #0d9488; border: 1px solid #ccfbf1; } 
+        .cat-living { background: #f5f3ff; color: #6d28d9; border: 1px solid #edd1ff; } 
+        .cat-kitchen { background: #fffbeb; color: #b45309; border: 1px solid #fef3c7; } 
         .cat-bath { background: #ecfeff; color: #0369a1; border: 1px solid #cffafe; }
         .cat-master { background: #fdf2f8; color: #be185d; border: 1px solid #fce7f3; }
         .cat-girls { background: #f0fdf4; color: #15803d; border: 1px solid #dcfce7; }
@@ -152,16 +141,16 @@
 
     <header>
         <div class="logo-area" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-            <h1>DRCS <span>v1.8.0_PRODUCTION</span></h1>
+            <h1>DRCS <span>欣圖軒C室專用生產版</span></h1>
             <p id="filtered-count-txt" style="font-size: 0.8rem; color: var(--accent); font-weight: 700;"></p>
         </div>
         <div class="dashboard-metrics">
             <div class="metric-card"><p>當前選取 / 全局總數</p><h3 id="m-count">0 / 0</h3></div>
             <div class="metric-card"><p>已釋放核銷成本 (已完工)</p><h3 id="m-budget-cap" style="color: var(--accent);">HK$ 0</h3></div>
-            <div class="metric-card"><p>已排產用品總值</p><h3 id="m-item-total">HK$ 0</h3></div>
+            <div class="metric-card"><p>當前排產大盤總值</p><h3 id="m-item-total">HK$ 0</h3></div>
             <div class="metric-card interactive-card" onclick="modifyTargetBudget()" title="點擊自訂修改裝修總預算金額">
                 <p>裝修目標總預算 ⚙️</p>
-                <h3 id="m-budget-total" style="color: var(--accent-hover);">HK$ 250,000</h3>
+                <h3 id="m-budget-total" style="color: var(--accent-hover);">HK$ 670,000</h3>
             </div>
             <div class="metric-card">
                 <p>專案完工進度 (Completion)</p>
@@ -175,7 +164,7 @@
         <span>📊 財務沙盤演算加載中...</span>
     </div>
 
-    <h3 style="margin-bottom:12px; font-size:0.9rem; font-weight:700; color:var(--text-muted)">📈 WBS 預算財務分層矩陣 (Cost Layers)</h3>
+    <h3 style="margin-bottom:12px; font-size:0.9rem; font-weight:700; color:var(--text-muted)"> McKinley WBS 預算財務分層矩陣 (Cost Layers)</h3>
     <div class="budget-layer-grid">
         <div class="layer-card layer-infra">
             <h4>1. 基礎硬裝基礎層</h4>
@@ -202,54 +191,27 @@
     <div class="crud-panel">
         <div class="panel-title">🛠️ 核心編輯：動態自訂新增 / 修正排產組件與預算</div>
         <form class="crud-form" onsubmit="handleCreateItem(event)">
-            <div class="form-group">
-                <label>組件識別碼 (UID)</label>
-                <input type="text" id="input-id" class="form-control" placeholder="例如: KIT-020" required style="font-family: monospace;">
-            </div>
-            <div class="form-group">
-                <label>核心用品名稱</label>
-                <input type="text" id="input-name" class="form-control" placeholder="例如: 智能微波爐" required>
-            </div>
-            <div class="form-group">
-                <label>有性格設計描述 / 圖紙幾何參數</label>
-                <input type="text" id="input-desc" class="form-control" placeholder="設計要點與尺寸..." required>
-            </div>
+            <div class="form-group"><label>組件識別碼 (UID)</label><input type="text" id="input-id" class="form-control" placeholder="A1" required style="font-family: monospace;"></div>
+            <div class="form-group"><label>核心用品名稱</label><input type="text" id="input-name" class="form-control" placeholder="工程第三者保險" required></div>
+            <div class="form-group"><label>幾何規格參數 (圖紙尺寸對應)</label><input type="text" id="input-desc" class="form-control" placeholder="1全包 / 現場放樣參數參數..." required></div>
             <div class="form-group">
                 <label>空間子系統歸屬</label>
                 <select id="input-zone" class="form-control">
-                    <option value="INFRA">全屋與基礎五金</option>
-                    <option value="LIV">客廳公共區</option>
-                    <option value="KIT">廚房實驗室</option>
-                    <option value="BTH">浴室洗滌室</option>
-                    <option value="MST">夫妻房綠洲</option>
-                    <option value="GRL">14/15歲女兒房</option>
-                    <option value="SOFT">後期軟裝雜項</option>
+                    <option value="INFRA">全屋與基礎工程</option><option value="LIV">客廳公共區</option><option value="KIT">廚房實驗室</option><option value="BTH">浴室洗滌室</option><option value="MST">夫妻房綠洲</option><option value="GRL">女兒房系統</option><option value="SOFT">後期自購軟裝</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>WBS 財務分析分層</label>
                 <select id="input-layer" class="form-control">
-                    <option value="infra">1. 基礎硬裝基礎層</option>
-                    <option value="main" selected>2. 空間主體家具層</option>
-                    <option value="app">3. 終端機電電器層</option>
-                    <option value="soft">4. 軟裝與生活雜項層</option>
+                    <option value="infra" selected>1. 基礎硬裝基礎層</option><option value="main">2. 空間主體家具層</option><option value="app">3. 終端機電電器層</option><option value="soft">4. 軟裝與生活雜項層</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>前置依賴鏈路 (Dependency ID)</label>
-                <input type="text" id="input-dep" class="form-control" placeholder="前置UID，無則寫：泥水工程完工" required>
-            </div>
-            <div class="form-group">
-                <label>估算價格 (HKD)</label>
-                <input type="number" id="input-val" class="form-control" placeholder="不加逗號，例如: 4200" required>
-            </div>
+            <div class="form-group"><label>前置依賴鏈路 (Dependency ID)</label><input type="text" id="input-dep" class="form-control" placeholder="無則寫: 項目啟動" required></div>
+            <div class="form-group"><label>估算價格 (HKD)</label><input type="number" id="input-val" class="form-control" placeholder="例如: 2800" required></div>
             <div class="form-group">
                 <label>生產初始狀態</label>
                 <select id="input-status" class="form-control">
-                    <option value="backlog">Backlog</option>
-                    <option value="procure">Procure</option>
-                    <option value="onsite">On-Site</option>
-                    <option value="installed">Installed</option>
+                    <option value="backlog">Backlog</option><option value="procure">Procure</option><option value="onsite">On-Site</option><option value="installed">Installed</option>
                 </select>
             </div>
             <button type="submit" class="btn-submit">＋ 注入排產矩陣</button>
@@ -264,13 +226,13 @@
             <div class="filter-label">空間網絡:</div>
             <div class="filter-scroll-wrapper">
                 <button class="filter-btn" data-zone="ALL" onclick="setZoneFilter('ALL')">顯示全屋</button>
-                <button class="filter-btn" data-zone="INFRA" onclick="setZoneFilter('INFRA')">全屋與基礎五金</button>
+                <button class="filter-btn" data-zone="INFRA" onclick="setZoneFilter('INFRA')">全屋與基礎工程</button>
                 <button class="filter-btn" data-zone="LIV" onclick="setZoneFilter('LIV')">客廳公共區</button>
                 <button class="filter-btn" data-zone="KIT" onclick="setZoneFilter('KIT')">廚房實驗室</button>
                 <button class="filter-btn" data-zone="BTH" onclick="setZoneFilter('BTH')">浴室洗滌室</button>
                 <button class="filter-btn" data-zone="MST" onclick="setZoneFilter('MST')">夫妻房綠洲</button>
-                <button class="filter-btn" data-zone="GRL" onclick="setZoneFilter('GRL')">14/15歲女兒房</button>
-                <button class="filter-btn" data-zone="SOFT" onclick="setZoneFilter('SOFT')">後期軟裝雜項</button>
+                <button class="filter-btn" data-zone="GRL" onclick="setZoneFilter('GRL')">女兒房系統</button>
+                <button class="filter-btn" data-zone="SOFT" onclick="setZoneFilter('SOFT')">後期自購軟裝</button>
             </div>
         </div>
         <div class="filter-row" id="status-filters">
@@ -300,13 +262,13 @@
                 <thead>
                     <tr>
                         <th>UID</th>
-                        <th>WBS 分層</th>
+                        <th>WBS分層</th>
                         <th>空間系統</th>
                         <th>核心用品組件</th>
-                        <th>性格設計與幾何規格參數 (圖紙尺寸對應)</th>
+                        <th>幾何規格參數 (對應真實報價)</th>
                         <th>直接前置依賴</th>
-                        <th>財務成本 (預算)</th>
-                        <th>狀態階段</th>
+                        <th>財務成本</th>
+                        <th>狀態</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -324,7 +286,7 @@
     </div>
 
     <div id="view-settings" class="view-content">
-        <p style="padding:20px; color:var(--text-muted); font-size:0.9rem; text-align:center;">⚙️ 可自訂增刪排產組件面板已向上整合置頂。請直接在上方編輯器中進行用品注入。</p>
+        <p style="text-align:center; color:var(--text-muted); font-size:0.9rem; padding:40px 0;">⚙️ 核心排產注入模組已由獨立視窗接管，請使用頂部面板進行動態 CRUD 操作。</p>
     </div>
 
     <nav class="ios-tabbar">
@@ -353,82 +315,95 @@
     <div id="toast"></div>
 
 <script>
-    // 數據持久化與遷移版本代號
-    const STORAGE_VERSION = "v180";
+    const STORAGE_VERSION = "v180_hoiro"; 
     const DATA_KEY = `drcs_dataset_${STORAGE_VERSION}`;
     const STATE_KEY = `drcs_state_${STORAGE_VERSION}`;
     const BUDGET_KEY = `drcs_budget_${STORAGE_VERSION}`;
 
-    // 多版本深拷貝無感遷移鏈路拓撲
-    const LEGACY_KEYS = [
-        "drcs_master_mutable_dataset_v172",
-        "drcs_dataset_v175",
-        "drcs_master_mutable_dataset"
+    // 數據完美整合：精準抓取 HOIRO 報價單與圖紙參數
+    const hoiroDataset = [
+        // A. 前期工程 (Infra)
+        { id: "A1", zone: "INFRA", zoneText: "🧱 基礎工程", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "工程第三者保險", desc: "1 全包", dep: "項目啟動", val: 2800, status: "installed" },
+        { id: "A2", zone: "INFRA", zoneText: "🧱 基礎工程", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "清拆廳房地台", desc: "500 平方呎", dep: "A1", val: 25000, status: "installed" },
+        { id: "A3", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "infra", layerText: "🧱 基礎硬裝", name: "清拆廚房牆身磁磚", desc: "240 平方呎 (包所有物件)", dep: "A1", val: 12000, status: "installed" },
+        { id: "A4", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "infra", layerText: "🧱 基礎硬裝", name: "清拆廁所牆身磁磚", desc: "190 平方呎 (包所有物件)", dep: "A1", val: 9500, status: "installed" },
+        { id: "A5", zone: "INFRA", zoneText: "🧱 基礎工程", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "裝修期間清泥頭", desc: "3次 (包運走及廢料處置)", dep: "A2", val: 4500, status: "installed" },
+
+        // B. 油漆項目 (Infra)
+        { id: "B1", zone: "INFRA", zoneText: "🧱 基礎工程", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "牆身及天花剷底批灰做油漆", desc: "1800 平方呎 (防潮底漆、批灰三次、砂紙打磨、面漆三次)", dep: "A5", val: 55800, status: "procure" },
+
+        // C. 泥水項目 (Infra)
+        { id: "C1", zone: "INFRA", zoneText: "🧱 基礎工程", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "新建磚牆", desc: "450 平方呎 (建立房間邊界牆體)", dep: "A5", val: 56250, status: "onsite" },
+        { id: "C2", zone: "INFRA", zoneText: "🧱 基礎工程", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "大地台鋪磚", desc: "425 平方呎 (不包磁磚) ⚠️配合鑽石斜角對縫放樣", dep: "C1", val: 42500, status: "procure" },
+        { id: "C3", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "infra", layerText: "🧱 基礎硬裝", name: "兩個廁所地台及牆身鋪磚", desc: "330 平方呎 (不包磁磚)", dep: "C1", val: 36300, status: "procure" },
+        { id: "C4", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "infra", layerText: "🧱 基礎硬裝", name: "廚房地台及牆身鋪磚", desc: "180 平方呎 (不包磁磚)", dep: "C1", val: 19800, status: "procure" },
+        { id: "C5", zone: "INFRA", zoneText: "🧱 基礎工程", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "廁所及廚房造防水", desc: "3套 (物料: 西卡 Sika 107)", dep: "C1", val: 6600, status: "procure" },
+        { id: "C6", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "infra", layerText: "🧱 基礎硬裝", name: "廁所造企缸", desc: "1套 ⚠️淨寬高精準對應圖紙 825mm", dep: "C5", val: 3500, status: "backlog" },
+        { id: "C7", zone: "INFRA", zoneText: "🧱 基礎工程", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "全屋吸咀", desc: "1全包 (廚、廁、大門、企缸)", dep: "C2", val: 4800, status: "backlog" },
+        { id: "C8", zone: "INFRA", zoneText: "🧱 基礎工程", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "廚廁造石屎台級", desc: "1全包", dep: "C1", val: 1800, status: "procure" },
+
+        // D. 木工工程 (Infra)
+        { id: "D1", zone: "INFRA", zoneText: "🧱 基礎工程", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "新造實芯大門", desc: "1套 (連工包料)", dep: "C7", val: 6800, status: "backlog" },
+        { id: "D2", zone: "INFRA", zoneText: "🧱 基礎工程", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "新造木房門", desc: "4套 (連工包料) ⚠️解決圖紙動線重疊干涉", dep: "B1", val: 23200, status: "backlog" },
+
+        // E. 水電工程 (Infra)
+        { id: "E1", zone: "INFRA", zoneText: "🧱 基礎工程", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "每組電位(預算)", desc: "60組 (含插座面板精密放線)", dep: "C1", val: 51000, status: "procure" },
+        { id: "E2", zone: "INFRA", zoneText: "🧱 基礎工程", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "新造電總箱", desc: "1組 (工業級安全負載防線)", dep: "A1", val: 5400, status: "installed" },
+        { id: "E3", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "infra", layerText: "🧱 基礎硬裝", name: "兩個廁所來去水喉(入牆)", desc: "13組", dep: "C1", val: 23400, status: "procure" },
+        { id: "E4", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "infra", layerText: "🧱 基礎硬裝", name: "廚房來去水喉(入牆)", desc: "6組", dep: "C1", val: 10800, status: "procure" },
+        { id: "E5", zone: "INFRA", zoneText: "🧱 基礎工程", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "全屋安裝潔具", desc: "9組", dep: "C3", val: 6300, status: "backlog" },
+
+        // F. 鋁質工程 (Infra)
+        { id: "F1", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "infra", layerText: "🧱 基礎硬裝", name: "廁所鋁質假天花連LED燈", desc: "2套", dep: "E3", val: 5600, status: "backlog" },
+        { id: "F2", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "infra", layerText: "🧱 基礎硬裝", name: "廚房鋁質假天花連LED燈", desc: "1套", dep: "E4", val: 3600, status: "backlog" },
+        { id: "F3", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "infra", layerText: "🧱 基礎硬裝", name: "廚房曲尺位鋁框玻璃趟門連玻璃牆身", desc: "1套 ⚠️劃分鑽石型邊界防阻油煙", dep: "B1", val: 18000, status: "backlog" },
+
+        // G. 訂造傢俬工程 (Main)
+        { id: "G1", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "main", layerText: "🔮 空間主體", name: "廚房下廚櫃", desc: "8 直呎", dep: "C4", val: 11200, status: "backlog" },
+        { id: "G2", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "main", layerText: "🔮 空間主體", name: "廚房下櫃石面", desc: "8 直呎 ⚠️斜邊 550mm-763mm 現場放樣", dep: "G1", val: 9600, status: "backlog" },
+        { id: "G3", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "main", layerText: "🔮 空間主體", name: "廚房吊櫃", desc: "10 直呎", dep: "C4", val: 13000, status: "backlog" },
+        { id: "G4", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "main", layerText: "🔮 空間主體", name: "客廁地櫃", desc: "2 直呎", dep: "C3", val: 2800, status: "backlog" },
+        { id: "G5", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "main", layerText: "🔮 空間主體", name: "客廁石面", desc: "2 直呎", dep: "G4", val: 2400, status: "backlog" },
+        { id: "G6", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "main", layerText: "🔮 空間主體", name: "客廁吊櫃", desc: "2 直呎", dep: "C3", val: 2600, status: "backlog" },
+        { id: "G7", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "main", layerText: "🔮 空間主體", name: "玄關高身鞋櫃", desc: "2.5 直呎", dep: "B1", val: 7000, status: "backlog" },
+        { id: "G8", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "main", layerText: "🔮 空間主體", name: "飯廳吊櫃", desc: "8 直呎", dep: "B1", val: 11200, status: "backlog" },
+        { id: "G9", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "main", layerText: "🔮 空間主體", name: "飯廳高身櫃", desc: "3.5 直呎", dep: "B1", val: 9800, status: "backlog" },
+        { id: "G10", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "main", layerText: "🔮 空間主體", name: "鋼琴上吊櫃", desc: "5 直呎", dep: "B1", val: 7000, status: "backlog" },
+        { id: "G11", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "main", layerText: "🔮 空間主體", name: "客廳電視櫃連廁所暗門", desc: "9.5 直呎 ⚠️順應鑽石牆面拉直視覺核心", dep: "B1", val: 26600, status: "backlog" },
+        { id: "G12", zone: "MST", zoneText: "🛏️ 夫妻房綠洲", catClass: "cat-master", layer: "main", layerText: "🔮 空間主體", name: "主房油壓床", desc: "4.5 直呎 (重型挺桿高張力收納)", dep: "C2", val: 7650, status: "backlog" },
+        { id: "G13", zone: "MST", zoneText: "🛏️ 夫妻房綠洲", catClass: "cat-master", layer: "main", layerText: "🔮 空間主體", name: "主房高身衣櫃(A)", desc: "8.5 直呎 頂天立地超大容量", dep: "B1", val: 23800, status: "backlog" },
+        { id: "G14", zone: "MST", zoneText: "🛏️ 夫妻房綠洲", catClass: "cat-master", layer: "main", layerText: "🔮 空間主體", name: "主房書檯連上吊櫃", desc: "3.5 直呎 窗台一體化延伸", dep: "B1", val: 4900, status: "backlog" },
+        { id: "G15", zone: "MST", zoneText: "🛏️ 夫妻房綠洲", catClass: "cat-master", layer: "main", layerText: "🔮 空間主體", name: "主房高身衣櫃(B)", desc: "10.5 直呎 特大L型轉角收納線", dep: "B1", val: 29400, status: "backlog" },
+        { id: "G16", zone: "GRL", zoneText: "👩‍🎓 女兒房系統", catClass: "cat-girls", layer: "main", layerText: "🔮 空間主體", name: "睡房1間房雙面櫃", desc: "5.5 直呎 ⚠️代替磚牆建立睡房1與2邊界", dep: "C1", val: 17600, status: "backlog" },
+        { id: "G17", zone: "GRL", zoneText: "👩‍🎓 女兒房系統", catClass: "cat-girls", layer: "main", layerText: "🔮 空間主體", name: "睡房1上格床", desc: "3 直呎 高架垂直空間壓榨", dep: "G16", val: 20400, status: "backlog" },
+        { id: "G18", zone: "GRL", zoneText: "👩‍🎓 女兒房系統", catClass: "cat-girls", layer: "main", layerText: "🔮 空間主體", name: "睡房1床下方書檯", desc: "3 直呎 ⚠️預留990mm推椅半徑", dep: "G17", val: 3900, status: "backlog" },
+        { id: "G19", zone: "GRL", zoneText: "👩‍🎓 女兒房系統", catClass: "cat-girls", layer: "main", layerText: "🔮 空間主體", name: "睡房2間房雙面櫃", desc: "4 直呎 ⚠️代磚牆雙面雙效衣櫃", dep: "C1", val: 12800, status: "backlog" },
+        { id: "G20", zone: "GRL", zoneText: "👩‍🎓 女兒房系統", catClass: "cat-girls", layer: "main", layerText: "🔮 空間主體", name: "睡房2單人床", desc: "3 直呎", dep: "G19", val: 5100, status: "backlog" },
+        { id: "G21", zone: "GRL", zoneText: "👩‍🎓 女兒房系統", catClass: "cat-girls", layer: "main", layerText: "🔮 空間主體", name: "睡房2書檯", desc: "4.5 直呎", dep: "G19", val: 5850, status: "backlog" },
+
+        // 額外注入：業主採購非標電器與軟裝 (App/Soft)
+        { id: "OFE-01", zone: "SOFT", zoneText: "後期自購軟裝", catClass: "cat-soft", layer: "app", layerText: "⚡ 終端電器", name: "分體式變頻冷氣機 ✕ 4部", desc: "客廳、主臥及女兒房獨立配置 (業主自購)", dep: "E1", val: 24000, status: "backlog" },
+        { id: "OFE-02", zone: "SOFT", zoneText: "後期自購軟裝", catClass: "cat-soft", layer: "soft", layerText: "🧺 軟裝雜項", name: "客廳抗污科技布沙發", desc: "⚠️長度限 1500-1600mm 防止阻截通道動線", dep: "C2", val: 7500, status: "backlog" }
     ];
 
-    const defaultDataset = [
-        { id: "INF-001", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "實心防盜加厚大門", desc: "重型加厚結構，完美隔音，封鎖走廊外來師奶八卦雜音。", dep: "泥水工程完工", val: 8500, status: "onsite" },
-        { id: "INF-002", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "黑金屬智能電子鎖", desc: "支援指紋/手機遠端藍牙解鎖，大門口防狼狽掏鑰匙設計。", dep: "INF-001", val: 3500, status: "installed" },
-        { id: "INF-003", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "全屋房門/滑動木門 ✕ 5套", desc: "含不鏽鋼防撞鉸鏈與阻尼膠條。女兒房A房門與推椅動軌重疊，改為隱形滑動趟門以釋放幾何干涉。", dep: "木工現場彈線確認", val: 12000, status: "procure" },
-        { id: "INF-004", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "極簡五金手把鎖芯組 ✕ 5套", desc: "把手全線視覺統一，高回彈阻尼靜音鎖體結構。", dep: "INF-003", val: 1500, status: "procure" },
-        { id: "INF-005", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "全屋高耐磨低甲醛木地板", desc: "一體通鋪延伸。需因應多邊形、多斜角鑽石型牆面進行現場精準放樣對縫裁切。", dep: "泥水基建工程完工", val: 22000, status: "onsite" },
-        { id: "INF-006", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "app", layerText: "⚡ 終端電器", name: "分體式變頻冷氣機 ✕ 5部", desc: "客廳、主臥及兩間女兒房獨立配置，極致靜音節能，滿足多家庭成員熱舒適環境。", dep: "INF-007", val: 28000, status: "backlog" },
-        { id: "INF-007", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "不鏽鋼/啞光灰開關面板", desc: "全屋高密度面板放線，具備極佳的阻尼彈擊機械手感。", dep: "INF-009", val: 2200, status: "backlog" },
-        { id: "INF-008", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "13A雙位/自帶Type-C快充插座", desc: "客廳沙發旁、床頭及書檯核心點位高密度放線，解決充電焦慮。", dep: "INF-007", val: 1800, status: "backlog" },
-        { id: "INF-009", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "強電總配電箱(總掣箱)", desc: "工業級漏電斷路器(RCD)安全分路配置，生產級安全負載防線。", dep: "全屋總供電接入確認", val: 3200, status: "installed" },
-
-        { id: "LIV-001", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "main", layerText: "🔮 空間主體", name: "懸空式C字玄關櫃連隱藏燈帶", desc: "下懸空放常穿鞋與掃地機，中間置物槽預留嵌入式感應暖色燈帶。", dep: "木工現場彈線確認", val: 14000, status: "backlog" },
-        { id: "LIV-002", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "main", layerText: "🔮 空間主體", name: "雙人座抗污科技布長沙發", desc: "尺寸限制檢測：長度控制在 1500mm-1600mm 內，完全防阻圓形地毯 (直徑975mm) 到東北走廊通道的動線衝突。", dep: "None", val: 7500, status: "procure" },
-        { id: "LIV-003", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "main", layerText: "🔮 空間主體", name: "伸縮岩板長方餐桌椅組", desc: "餐桌面長 1060mm，背靠斜邊牆體佈置，優化客廳公共停機坪空間動線。", dep: "None", val: 4800, status: "backlog" },
-        { id: "LIV-004", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "infra", layerText: "🧱 基礎硬裝", name: "無主燈線條天花軌道射燈組", desc: "順應鑽石型客廳多邊走向佈線，利用反射光源修正原始戶型視覺偏位缺陷。", dep: "木工天花吊頂完工", val: 5500, status: "backlog" },
-
-        { id: "KIT-002", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "main", layerText: "🔮 空間主體", name: "客製化免拉手防潮櫥櫃組", desc: "因應鑽石斜牆做不規則斜度中島櫃身結構，內部嵌入阻尼導軌與五金拉籃。", dep: "木工現場彈線確認", val: 12000, status: "procure" },
-        { id: "KIT-001", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "main", layerText: "🔮 空間主體", name: "客製斜邊異型石英石檯面", desc: "深度 550mm-763mm 幾何斜切，需現場木模 1:1 精準放樣放量，抗滲透高硬度。", dep: "KIT-002", val: 9800, status: "onsite" },
-        { id: "KIT-003", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "main", layerText: "🔮 空間主體", name: "大單盆不鏽鋼槽+抽拉龍頭", desc: "深度下嵌，洗滌大鑊不濺水。拉出式冷熱龍頭全面清理不規則斜角中島檯面死角。", dep: "KIT-001", val: 2600, status: "onsite" },
-        { id: "KIT-004", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "app", layerText: "⚡ 終端電器", name: "直吸式強力抽油煙機", desc: "斜向爐具專用排煙引導。中式爆炒剋星，油煙在產源被阻截抽離。", dep: "KIT-002", val: 4500, status: "procure" },
-
-        { id: "BTH-001", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "main", layerText: "🔮 空間主體", name: "一體式懸空洗手盆櫃+鏡櫃", desc: "盆底不留死角方便地拖橫掃，鏡櫃隱藏收納全家人的洗漱用品。", dep: "泥水基建工程完工", val: 5200, status: "installed" },
-        { id: "BTH-002", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "main", layerText: "🔮 空間主體", name: "黑框極簡防爆玻璃浴屏", desc: "乾濕分離。企缸安裝淨寬度 825mm 鋼化安全防爆玻璃推拉門。", dep: "BTH-001", val: 4200, status: "onsite" },
-        { id: "BTH-004", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "app", layerText: "⚡ 終端電器", name: "天花式三合一浴室寶", desc: "冬天保溫，梅雨季節八口人的衣物集體烘乾完全離不開它。", dep: "INF-007", val: 2800, status: "installed" },
-
-        { id: "MST-001", zone: "MST", zoneText: "🛏️ 夫妻房綠洲", catClass: "cat-master", layer: "main", layerText: "🔮 空間主體", name: "液壓高張力油壓雙人床架", desc: "東北大房核心收納，配備重型挺桿，安全省力拉升儲存換季物資。", dep: "INF-005", val: 6500, status: "procure" },
-        { id: "MST-002", zone: "MST", zoneText: "🛏️ 夫妻房綠洲", catClass: "cat-master", layer: "soft", layerText: "🧺 軟裝雜項", name: "獨立袋裝彈簧五尺雙人床褥", desc: "尺寸 1500x1900mm。床邊通道預留淨寬 900mm 直通衛浴門，極致抗干擾睡眠環境。", dep: "MST-001", val: 8800, status: "procure" },
-
-        { id: "GRL-001", zone: "GRL", zoneText: "👩‍🎓 女兒房 ✕ 2", catClass: "cat-girls", layer: "main", layerText: "🔮 空間主體", name: "女兒房A：榻榻米L型床檯組合櫃", desc: "順應西南斜牆客製化。床架緊貼 1905mm 背牆，橫向無縫對接寬 1062mm 書檯面，極致壓榨平方數。", dep: "木工現場彈線確認", val: 15000, status: "backlog" },
-        { id: "GRL-002", zone: "GRL", zoneText: "👩‍🎓 女兒房 ✕ 2", catClass: "cat-girls", layer: "main", layerText: "🔮 空間主體", name: "女兒房B：窗台一體化超寬書檯連大衣櫃", desc: "利用東北大窗台擴展書檯工作深度，橫向無縫對接整排長 2400mm 頂天立地大衣櫃，滿足少女愛美收納。", dep: "木工現場彈線確認", val: 13000, status: "backlog" },
-        { id: "GRL-003", zone: "GRL", zoneText: "👩‍🎓 女兒房 ✕ 2", catClass: "cat-girls", layer: "soft", layerText: "🧺 軟裝雜項", name: "中學生高支撐網面人體工學椅 ✕ 2張", desc: "動態護腰。房A需預留後方 990mm 旋轉推移半徑，防止久坐卡碰後牆衣櫃。", dep: "None", val: 2400, status: "procure" },
-        { id: "GRL-004", zone: "GRL", zoneText: "👩‍🎓 女兒房 ✕ 2", catClass: "cat-girls", layer: "soft", layerText: "🧺 軟裝雜項", name: "單人高密度護脊床褥 ✕ 2張", desc: "尺寸分別依房A與房B工廠1:1客製。給予挑燈應戰DSE少女最硬核的脊椎支撐守護。", dep: "GRL-001", val: 6000, status: "procure" },
-        { id: "GRL-005", zone: "GRL", zoneText: "👩‍🎓 女兒房 ✕ 2", catClass: "cat-girls", layer: "soft", layerText: "🧺 軟裝雜項", name: "防眩光護眼LED書檯燈 ✕ 2盞", desc: "無重影、光照均勻，挑燈夜戰模擬題的最強輔助戰友。", dep: "INF-008", val: 1100, status: "backlog" }
-    ];
+    let drcsMasterData = [];
+    let userTargetBudget = 670000; 
+    let systemState = { view: "today", zone: "ALL", status: "ALL", searchKeyword: "" };
 
     function initStore() {
-        // 大盤歷史緩存動態無感轉移管道 (Migration Pipeline)
-        if (!localStorage.getItem(DATA_KEY)) {
-            for (const legacyKey of LEGACY_KEYS) {
-                const legacyData = localStorage.getItem(legacyKey);
-                if (legacyData) {
-                    localStorage.setItem(DATA_KEY, legacyData);
-                    console.log(`[DRCS MIGRATION ENGINE] 資料結構由歷史快取 ${legacyKey} 順利移轉繼承。`);
-                    break;
-                }
-            }
-        }
-
         const localData = localStorage.getItem(DATA_KEY);
         if (localData) {
-            try { drcsMasterData = JSON.parse(localData); } catch(e) { drcsMasterData = [...defaultDataset]; }
+            try { drcsMasterData = JSON.parse(localData); } catch(e) { drcsMasterData = [...hoiroDataset]; }
         } else {
-            drcsMasterData = [...defaultDataset];
+            drcsMasterData = [...hoiroDataset];
             localStorage.setItem(DATA_KEY, JSON.stringify(drcsMasterData));
         }
 
         const savedBudget = localStorage.getItem(BUDGET_KEY);
-        if (savedBudget) { userTargetBudget = parseInt(savedBudget) || 250000; }
+        if (savedBudget) { userTargetBudget = parseInt(savedBudget) || 670000; }
 
         const savedState = localStorage.getItem(STATE_KEY);
-        if (savedState) {
-            try { systemState = JSON.parse(savedState); } catch(e) {}
-        }
+        if (savedState) { try { systemState = JSON.parse(savedState); } catch(e) {} }
         
         document.getElementById('search-bar').value = systemState.searchKeyword || '';
         updateTabUI();
@@ -441,13 +416,18 @@
         localStorage.setItem(STATE_KEY, JSON.stringify(systemState)); 
     }
 
+    function switchIosTab(tabId) {
+        systemState.view = tabId; saveStore(); updateTabUI(); renderEngine();
+        showToast(`已切換至模組: ${tabId.toUpperCase()}`);
+    }
+
     function modifyTargetBudget() {
-        const newBudget = prompt("請輸入控管裝修目標總預算金額上限 (HKD)：", userTargetBudget);
+        const newBudget = prompt("請輸入您期望控管的【裝修目標總預算】金額 (HKD)：", userTargetBudget);
         if (newBudget !== null) {
             const parsed = parseInt(newBudget);
             if (!isNaN(parsed) && parsed > 0) {
                 userTargetBudget = parsed; saveStore(); renderEngine();
-                showToast(`[預算變更] 目標大盤變更為: HK$ ${userTargetBudget.toLocaleString()}`);
+                showToast(`目標總預算更新為: HK$ ${userTargetBudget.toLocaleString()}`);
             } else { alert("請輸入有效的正整數金額！"); }
         }
     }
@@ -455,88 +435,63 @@
     function editItemInline(id) {
         const match = drcsMasterData.find(i => i.id === id);
         if(!match) return;
-
-        const newName = prompt(`[編修組件名稱 ${id}]：`, match.name);
+        const newName = prompt(`[修改組件 ${id}] 請輸入全新用品名稱：`, match.name);
         if (newName === null || newName.trim() === "") return;
-
-        const newVal = prompt(`[編修預算單價 ${id}]：`, match.val);
+        const newVal = prompt(`[修改組件 ${id}] 請輸入全新預算價錢 (HKD)：`, match.val);
         if (newVal === null) return;
         const parsedVal = parseInt(newVal);
-        if (isNaN(parsedVal) || parsedVal < 0) { alert("金額數值不合法！"); return; }
+        if (isNaN(parsedVal) || parsedVal < 0) { alert("金額格式錯誤！"); return; }
 
-        match.name = escapeHtml(newName.trim()); 
-        match.val = parsedVal;
-        saveStore(); renderEngine();
-        showToast(`[組件更新] ${id} 參數重編完畢。`);
+        match.name = escapeHtml(newName.trim()); match.val = parsedVal;
+        saveStore(); renderEngine(); showToast(`[組件更新] ${id} 規格與預算已重新編寫！`);
     }
 
     function handleCreateItem(e) {
         e.preventDefault();
         const id = document.getElementById('input-id').value.trim().toUpperCase();
-        
-        // 嚴格字元白名單篩選，徹底瓦解 HTML 屬性閉合式 XSS 攻擊
-        if(!/^[A-Z0-9\-_]+$/.test(id)){
-            alert("⚠️ 格式衝突：UID僅允許包含大寫英文字母、數字、減號或下劃線！");
-            return;
-        }
+        if(!/^[A-Z0-9\-_]+$/.test(id)){ alert("⚠️ UID 格式不合法！僅允許英數字與劃線。"); return; }
 
         const name = escapeHtml(document.getElementById('input-name').value.trim());
         const desc = escapeHtml(document.getElementById('input-desc').value.trim());
         const dep = escapeHtml(document.getElementById('input-dep').value.trim().toUpperCase());
-
         const zone = document.getElementById('input-zone').value;
         const layer = document.getElementById('input-layer').value;
         const val = parseInt(document.getElementById('input-val').value) || 0;
         const status = document.getElementById('input-status').value;
 
-        if(drcsMasterData.some(item => item.id === id)) { alert(`⚠️ UID [ ${id} ] 在系統中已存在衝突！`); return; }
+        if(drcsMasterData.some(item => item.id === id)) { alert(`⚠️ 元件代碼 [ ${id} ] 重複！`); return; }
 
-        const zoneTextMap = { INFRA:"🚪 全屋與基礎", LIV:"🛋️ 客廳公共區", KIT:"🍳 廚房實驗室", BTH:"🚿 浴室洗滌室", MST:"🛏️ 夫妻房綠洲", GRL:"👩‍🎓 女兒房 ✕ 2", SOFT:"🧺 後期軟裝雜項" };
+        const zoneTextMap = { INFRA:"🧱 基礎工程", LIV:"🛋️ 客廳公共區", KIT:"🍳 廚房實驗室", BTH:"🚿 浴室洗滌室", MST:"🛏️ 夫妻房綠洲", GRL:"👩‍🎓 女兒房系統", SOFT:"🧺 後期自購軟裝" };
         const catClassMap = { INFRA:"cat-infra", LIV:"cat-living", KIT:"cat-kitchen", BTH:"cat-bath", MST:"cat-master", GRL:"cat-girls", SOFT:"cat-soft" };
         const layerTextMap = { infra: "🧱 基礎硬裝", main: "🔮 空間主體", app: "⚡ 終端電器", soft: "🧺 軟裝雜項" };
 
-        const newItem = { id, zone, zoneText: zoneTextMap[zone], catClass: catClassMap[zone], layer, layerText: layerTextMap[layer], name, desc, dep, val, status };
-        drcsMasterData.push(newItem);
-        
-        saveStore(); renderEngine();
-        showToast(`[排產注入] 組件 ${id} 已進入大盤序列。`);
+        drcsMasterData.push({ id, zone, zoneText: zoneTextMap[zone], catClass: catClassMap[zone], layer, layerText: layerTextMap[layer], name, desc, dep, val, status });
+        saveStore(); renderEngine(); showToast(`自訂組件 ${id} 注入排產核心！`);
         document.getElementById('input-id').value = ''; document.getElementById('input-name').value = '';
         document.getElementById('input-desc').value = ''; document.getElementById('input-val').value = '';
     }
 
     function handleDeleteItem(id) {
-        if(confirm(`確定從排產大盤中永久移出組件 [ ${id} ] 嗎？`)) {
+        if(confirm(`🚨 永久移出組件 [ ${id} ] 嗎？`)) {
             drcsMasterData = drcsMasterData.filter(item => item.id !== id);
-            saveStore(); renderEngine(); showToast(`已移出組件 ${id}`);
+            saveStore(); renderEngine(); showToast(`組件 ${id} 已移出排產線。`);
         }
     }
 
-    // 完美修正單引號轉義規則，杜絕語法解析期死鎖
+    function setZoneFilter(zoneCode) { systemState.zone = zoneCode; saveStore(); updateTabUI(); renderEngine(); }
+    function setStatusFilter(statusCode) { systemState.status = statusCode; saveStore(); updateTabUI(); renderEngine(); }
+    function handleSearch(val) { systemState.searchKeyword = val.trim(); saveStore(); renderEngine(); }
+
     function escapeHtml(str) {
-        return String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
     }
-
-    function escapeRegExp(string) {
-        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    }
-
+    function escapeRegExp(string) { return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
     function highlightText(text, keyword) {
         if (!keyword) return text;
-        const escapedKeyword = escapeRegExp(keyword);
-        const regex = new RegExp(`(${escapedKeyword})`, 'gi');
+        const regex = new RegExp(`(${escapeRegExp(keyword)})`, 'gi');
         return text.replace(regex, '<mark>$1</mark>');
     }
-
-    // 統一高亮與轉義安全封裝管道
-    function safeHighlight(text, keyword) {
-        const safeStr = escapeHtml(text);
-        return highlightText(safeStr, keyword);
-    }
+    function safeHighlight(text, keyword) { return highlightText(escapeHtml(text), keyword); }
 
     function handleDragStart(e, itemId) { e.dataTransfer.setData("text/plain", itemId); }
     function allowDrop(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
@@ -545,15 +500,13 @@
         e.preventDefault(); e.currentTarget.classList.remove('drag-over');
         const itemId = e.dataTransfer.getData("text/plain");
         const matchItem = drcsMasterData.find(i => i.id === itemId);
-        if(matchItem) { matchItem.status = targetStatus; saveStore(); renderEngine(); showToast(`[排產調度] ${matchItem.name}`); }
+        if(matchItem) { matchItem.status = targetStatus; saveStore(); renderEngine(); showToast(`[狀態遞變] ${matchItem.name} ➔ ${targetStatus}`); }
     }
 
     function buildTrueDependencyTree() {
         const treeContainer = document.getElementById('tree-root-node');
-        treeContainer.innerHTML = "";
+        if (!treeContainer) return; treeContainer.innerHTML = "";
         const rootItems = drcsMasterData.filter(item => !drcsMasterData.some(parent => parent.id === item.dep));
-        
-        // 每次根迭代皆使用嶄新獨立的 Set，杜絕跨路徑拓撲的誤判
         rootItems.forEach((root, idx) => {
             treeContainer.insertAdjacentHTML('beforeend', createTreeNodeHTML(root, idx === rootItems.length - 1, 0, new Set()));
         });
@@ -561,57 +514,40 @@
 
     function createTreeNodeHTML(node, isLast, depth, visited) {
         if (visited.has(node.id)) {
-            return `
-                <div class="tree-node ${isLast ? 'last' : ''}">
-                    <div class="tree-content-wrapper" style="border-color: var(--accent-danger); background: #fef2f2;">
-                        <strong style="color: var(--accent-danger); font-family: monospace;">⚠️ 循環衝突死鎖: ${node.id}</strong>
-                        <span style="color: var(--accent-danger); font-size: 0.75rem;">(偵測到密閉依賴鏈，遞迴已安全熔斷)</span>
-                    </div>
-                </div>
-            `;
+            return `<div class="tree-node ${isLast ? 'last' : ''}"><div class="tree-content-wrapper" style="border-color: var(--accent-danger); background: #fef2f2;"><strong style="color: var(--accent-danger);">⚠️ 循環死鎖: ${node.id}</strong></div></div>`;
         }
-
         visited.add(node.id);
-
         const statusColor = node.status === 'installed' ? 'var(--accent-success)' : (node.status === 'onsite' ? 'var(--accent-hover)' : 'var(--text-muted)');
         const hName = safeHighlight(node.name, systemState.searchKeyword);
-        
         let html = `
             <div class="tree-node ${isLast ? 'last' : ''}">
-                <div class="tree-content-wrapper" onclick="editItemInline('${node.id}')" style="cursor:pointer;" title="點擊快速修改名稱及價格">
+                <div class="tree-content-wrapper" onclick="editItemInline('${node.id}')" style="cursor:pointer;">
                     <strong style="color:var(--accent-hover); font-family:monospace;">${node.id}</strong>
                     <span>${hName}</span>
                     <span class="tree-status" style="background:${statusColor}22; color:${statusColor}; border:1px solid ${statusColor}44;">${node.status}</span>
                     <span style="color:var(--text-muted); font-size:0.75rem;">(HK$ ${node.val.toLocaleString()}) ⚙️</span>
                 </div>
-            </div>
-        `;
+            </div>`;
         const children = drcsMasterData.filter(child => child.dep === node.id);
         if (children.length > 0) {
-            children.forEach((child, cIdx) => { 
-                html += createTreeNodeHTML(child, cIdx === children.length - 1, depth + 1, visited); 
-            });
+            children.forEach((child, cIdx) => { html += createTreeNodeHTML(child, cIdx === children.length - 1, depth + 1, visited); });
         }
-
-        visited.delete(node.id);
-        return html;
+        visited.delete(node.id); return html;
     }
 
     function renderReportView(layerBudgets) {
-        const holder = document.getElementById('layer-grid-holder');
-        if(!holder) return;
-        holder.innerHTML = `
-            <div class="layer-card layer-infra"><h4>1. 基礎硬裝基礎層</h4><div class="layer-card-meta"><span>應分配預算:</span><span>HK$ ${layerBudgets.infra.t.toLocaleString()}</span></div><div class="layer-card-meta"><span>已核銷完工:</span><span style="color:var(--accent-success)">HK$ ${layerBudgets.infra.s.toLocaleString()}</span></div></div>
-            <div class="layer-card layer-main"><h4>2. 空間主體家具層</h4><div class="layer-card-meta"><span>應分配預算:</span><span>HK$ ${layerBudgets.main.t.toLocaleString()}</span></div><div class="layer-card-meta"><span>已核銷完工:</span><span style="color:var(--accent-success)">HK$ ${layerBudgets.main.s.toLocaleString()}</span></div></div>
-            <div class="layer-card layer-app"><h4>3. 終端機電電器層</h4><div class="layer-card-meta"><span>應分配預算:</span><span>HK$ ${layerBudgets.app.t.toLocaleString()}</span></div><div class="layer-card-meta"><span>已核銷完工:</span><span style="color:var(--accent-success)">HK$ ${layerBudgets.app.s.toLocaleString()}</span></div></div>
-            <div class="layer-card layer-soft"><h4>4. 軟裝與生活雜項層</h4><div class="layer-card-meta"><span>應分配預算:</span><span>HK$ ${layerBudgets.soft.t.toLocaleString()}</span></div><div class="layer-card-meta"><span>已核銷完工:</span><span style="color:var(--accent-success)">HK$ ${layerBudgets.soft.s.toLocaleString()}</span></div></div>
-        `;
+        const holder = document.getElementById('layer-grid-holder'); if(!holder) return;
+        holder.innerHTML = ['infra', 'main', 'app', 'soft'].map((l, i) => `
+            <div class="layer-card layer-${l}">
+                <h4>${i+1}. ${l==='infra'?'基礎硬裝基礎層':l==='main'?'空間主體家具層':l==='app'?'終端機電電器層':'軟裝與生活雜項層'}</h4>
+                <div class="layer-card-meta"><span>應分配預算:</span><span>HK$ ${layerBudgets[l].t.toLocaleString()}</span></div>
+                <div class="layer-card-meta"><span>已核銷完工:</span><span style="color:var(--accent-success)">HK$ ${layerBudgets[l].s.toLocaleString()}</span></div>
+            </div>`).join('');
     }
 
     function updateTabUI() {
         document.querySelectorAll('.ios-tabbar .tab-item').forEach(b => b.classList.remove('active'));
-        const activeTab = document.getElementById(`tab-${systemState.view}`);
-        if(activeTab) activeTab.classList.add('active');
+        const activeTab = document.getElementById(`tab-${systemState.view}`); if(activeTab) activeTab.classList.add('active');
 
         document.querySelectorAll('#zone-filters .filter-btn').forEach(b => {
             b.classList.remove('active'); if(b.getAttribute('data-zone') === systemState.zone) b.classList.add('active');
@@ -621,80 +557,65 @@
         });
 
         document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
-        const targetView = document.getElementById(`view-${systemState.view}`);
-        if(targetView) targetView.classList.add('active');
-    }
-
-    function showToast(txt) {
-        const t = document.getElementById('toast'); 
-        if(t) {
-            t.innerText = txt; t.style.display = 'block';
-            setTimeout(() => { t.style.display = 'none'; }, 3000);
-        }
+        const targetView = document.getElementById(`view-${systemState.view}`); if(targetView) targetView.classList.add('active');
     }
 
     function renderEngine() {
-        const backlogHolder = document.querySelector('#col-backlog .holder');
-        const procureHolder = document.querySelector('#col-procure .holder');
-        const onsiteHolder = document.querySelector('#col-onsite .holder');
-        const installedHolder = document.querySelector('#col-installed .holder');
+        const bHolder = document.querySelector('#col-backlog .holder');
+        const pHolder = document.querySelector('#col-procure .holder');
+        const oHolder = document.querySelector('#col-onsite .holder');
+        const iHolder = document.querySelector('#col-installed .holder');
         const gridTbody = document.getElementById('grid-tbody');
 
-        if(backlogHolder) backlogHolder.innerHTML = ''; if(procureHolder) procureHolder.innerHTML = '';
-        if(onsiteHolder) onsiteHolder.innerHTML = ''; if(installedHolder) installedHolder.innerHTML = '';
+        if(bHolder) bHolder.innerHTML = ''; if(pHolder) pHolder.innerHTML = '';
+        if(oHolder) oHolder.innerHTML = ''; if(iHolder) iHolder.innerHTML = '';
         if(gridTbody) gridTbody.innerHTML = '';
 
         let colCounts = { backlog: 0, procure: 0, onsite: 0, installed: 0 };
-        let filteredCount = 0;
+        let filteredCount = 0, totalItemsValue = 0, capitalizationSpent = 0;
         let layerBudgets = { infra: { t: 0, s: 0 }, main: { t: 0, s: 0 }, app: { t: 0, s: 0 }, soft: { t: 0, s: 0 } };
-        let totalItemsValue = 0, capitalizationSpent = 0;
 
         const kw = systemState.searchKeyword.toLowerCase();
 
         drcsMasterData.forEach(item => {
-            layerBudgets[item.layer].t += item.val;
-            totalItemsValue += item.val;
+            layerBudgets[item.layer].t += item.val; totalItemsValue += item.val;
             if(item.status === 'installed') { layerBudgets[item.layer].s += item.val; capitalizationSpent += item.val; }
 
             if (systemState.zone !== "ALL" && item.zone !== systemState.zone) return;
             if (systemState.status !== "ALL" && item.status !== systemState.status) return;
-            if (kw && !(item.id.toLowerCase().includes(kw) || item.name.toLowerCase().includes(kw) || item.desc.toLowerCase().includes(kw) || item.dep.toLowerCase().includes(kw))) return;
+            if (kw && !([item.id, item.name, item.desc, item.dep].some(f => f.toLowerCase().includes(kw)))) return;
 
             filteredCount++; colCounts[item.status]++;
-
             const hName = safeHighlight(item.name, systemState.searchKeyword);
             const hDesc = safeHighlight(item.desc, systemState.searchKeyword);
             const hDep = safeHighlight(item.dep, systemState.searchKeyword);
 
-            if (systemState.view === "today" && backlogHolder) {
+            if (systemState.view === "today" && bHolder) {
                 const cardHtml = `
                     <div class="kanban-card" draggable="true" ondragstart="handleDragStart(event, '${item.id}')">
                         <button class="btn-delete" onclick="handleDeleteItem('${item.id}'); event.stopPropagation();">✕</button>
                         <span class="card-tag ${item.catClass}">${item.zoneText}</span>
-                        <div class="card-title" onclick="editItemInline('${item.id}'); event.stopPropagation();" title="點擊修改名稱與價格">${hName} ⚙️</div>
+                        <div class="card-title" onclick="editItemInline('${item.id}'); event.stopPropagation();">${hName} ⚙️</div>
                         <div class="card-desc">${hDesc}</div>
                         <div class="card-meta"><span>${item.id}</span><span style="font-weight:bold;">HK$ ${item.val.toLocaleString()}</span></div>
-                    </div>
-                `;
-                if(item.status === 'backlog') backlogHolder.insertAdjacentHTML('beforeend', cardHtml);
-                if(item.status === 'procure') procureHolder.insertAdjacentHTML('beforeend', cardHtml);
-                if(item.status === 'onsite') onsiteHolder.insertAdjacentHTML('beforeend', cardHtml);
-                if(item.status === 'installed') installedHolder.insertAdjacentHTML('beforeend', cardHtml);
+                    </div>`;
+                if(item.status === 'backlog') bHolder.insertAdjacentHTML('beforeend', cardHtml);
+                if(item.status === 'procure') pHolder.insertAdjacentHTML('beforeend', cardHtml);
+                if(item.status === 'onsite') oHolder.insertAdjacentHTML('beforeend', cardHtml);
+                if(item.status === 'installed') iHolder.insertAdjacentHTML('beforeend', cardHtml);
             } else if (systemState.view === "log" && gridTbody) {
-                const rowHtml = `
+                gridTbody.insertAdjacentHTML('beforeend', `
                     <tr>
                         <td style="font-family: monospace; font-weight:700; color:var(--accent);">${item.id}</td>
                         <td><span class="card-tag" style="border-left:3px solid var(--layer-${item.layer}); margin:0;">${item.layerText}</span></td>
                         <td><span class="card-tag ${item.catClass}" style="margin:0;">${item.zoneText}</span></td>
-                        <td style="font-weight:700; cursor:pointer; color:var(--text-main);" onclick="editItemInline('${item.id}')" title="點擊快速編修">${hName} ⚙️</td>
-                        <td style="color:var(--text-muted); font-size:0.75rem; line-height:1.4;">${hDesc}</td>
+                        <td style="font-weight:700; cursor:pointer;" onclick="editItemInline('${item.id}')">${hName} ⚙️</td>
+                        <td style="color:var(--text-muted); font-size:0.75rem;">${hDesc}</td>
                         <td><span class="tree-connector">${hDep}</span></td>
                         <td style="font-weight:700; font-family:monospace;">HK$ ${item.val.toLocaleString()}</td>
                         <td><span class="status-pill pill-${item.status}">${item.status}</span></td>
-                        <td><button class="filter-btn" style="border-color:var(--accent-danger); color:var(--accent-danger); padding:4px 8px; font-size:0.7rem; background:#fff;" onclick="handleDeleteItem('${item.id}')">移出</button></td>
-                    </tr>
-                `;
-                gridTbody.insertAdjacentHTML('beforeend', rowHtml);
+                        <td><button class="filter-btn" style="border-color:var(--accent-danger); color:var(--accent-danger); padding:4px 8px; font-size:0.7rem;" onclick="handleDeleteItem('${item.id}')">移出</button></td>
+                    </tr>`);
             }
         });
 
@@ -702,10 +623,7 @@
         if (systemState.view === "report") renderReportView(layerBudgets);
 
         if(document.getElementById('c-backlog')) {
-            document.getElementById('c-backlog').innerText = colCounts.backlog;
-            document.getElementById('c-procure').innerText = colCounts.procure;
-            document.getElementById('c-onsite').innerText = colCounts.onsite;
-            document.getElementById('c-installed').innerText = colCounts.installed;
+            ['backlog', 'procure', 'onsite', 'installed'].forEach(s => document.getElementById(`c-${s}`).innerText = colCounts[s]);
         }
 
         document.getElementById('m-budget-total').innerText = "HK$ " + userTargetBudget.toLocaleString();
@@ -715,23 +633,24 @@
         const remainingBudget = userTargetBudget - totalItemsValue;
         const barNode = document.getElementById('sandbox-financial-bar');
         if (remainingBudget >= 0) {
-            barNode.innerHTML = `<span>🟢 <strong>幾何與財務大盤聯動：</strong> 當前排產未超載。大盤賸餘空間：<strong style="color:var(--accent-success)">HK$ ${remainingBudget.toLocaleString()}</strong></span>`;
-            barNode.style.borderColor = "var(--border-color)";
+            barNode.innerHTML = `<span>🟢 <strong>大盤財務健康：</strong> 預算控制線內，賸餘清單緩衝空間：<strong style="color:var(--accent-success)">HK$ ${remainingBudget.toLocaleString()}</strong></span>`;
+            barNode.style.borderColor = "var(--accent)";
         } else {
-            barNode.innerHTML = `<span>⚠️ <strong>空間/預算超載預警：</strong> 已超出目標預算！赤字缺口：<strong style="color:var(--accent-danger)">HK$ ${Math.abs(remainingBudget).toLocaleString()}</strong></span>`;
+            barNode.innerHTML = `<span>⚠️ <strong>財務預算超載赤字：</strong> 已超出目標控制線！缺口金額：<strong style="color:var(--accent-danger)">HK$ ${Math.abs(remainingBudget).toLocaleString()}</strong></span>`;
             barNode.style.borderColor = "var(--accent-danger)";
         }
 
         const globalTotal = drcsMasterData.length;
-        const completionRatio = globalTotal > 0 ? ((drcsMasterData.filter(i => i.status === 'installed').length / globalTotal) * 100).toFixed(1) : "0.0";
-        document.getElementById('m-ratio').innerText = completionRatio + "%";
-        document.getElementById('m-progress').style.width = completionRatio + "%";
+        const ratio = globalTotal > 0 ? ((drcsMasterData.filter(i => i.status === 'installed').length / globalTotal) * 100).toFixed(1) : "0.0";
+        document.getElementById('m-ratio').innerText = ratio + "%";
+        document.getElementById('m-progress').style.width = ratio + "%";
         document.getElementById('m-count').innerText = `${filteredCount} / ${globalTotal}`;
+        document.getElementById('filtered-count-txt').innerText = (kw || systemState.zone !== "ALL" || systemState.status !== "ALL") ? `⚙️ 已過濾篩選出 ${filteredCount} 個項目` : "";
+    }
 
-        const txtNode = document.getElementById('filtered-count-txt');
-        if(kw || systemState.zone !== "ALL" || systemState.status !== "ALL") {
-            txtNode.innerText = `⚙️ 過濾出 ${filteredCount} 個核心組件`;
-        } else { txtNode.innerText = ""; }
+    function showToast(msg) {
+        const t = document.getElementById('toast'); t.innerText = msg; t.style.display = 'block';
+        setTimeout(() => { t.style.display = 'none'; }, 2000);
     }
 
     window.onload = () => { initStore(); };
