@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DRCS v1.7.4 - 數位裝修指揮系統 (五大核心修復穩定版)</title>
+    <title>DRCS v1.7.6 - 數位裝修指揮系統 (企業級旗艦穩定版)</title>
     <style>
         :root {
             --bg-primary: #f8fafc; /* 主要明亮底色 */
-            --bg-secondary: #ffffff; /* 白瓷容器畫布 */
+            --bg-secondary: #ffffff; /* 主要白瓷容器畫布 */
             --bg-card: #ffffff;
             --text-main: #0f172a; /* 深碳灰 */
             --text-muted: #64748b;
@@ -17,7 +17,7 @@
             --accent-warn: #d97706; /* 琥珀橙 Amber */
             --accent-danger: #ef4444;
             --border-color: #e2e8f0;
-            --highlight-bg: #f59e0b22;
+            --highlight-bg: #f59e0b33;
             --highlight-text: #b45309;
             --layer-infra: #0d9488;
             --layer-main: #8b5cf6; /* 優雅紫 */
@@ -56,7 +56,7 @@
         .layer-card h4 { font-size: 0.92rem; font-weight: 700; margin-bottom: 8px; color: var(--text-main); }
         .layer-card-meta { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; font-family: monospace; }
 
-        /* Dynamic CRUD Input Panel */
+        /* Dynamic CRUD Control Input Panel */
         .crud-panel { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 20px; border-radius: 10px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
         .panel-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 16px; color: var(--accent); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
         .crud-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: flex-end; }
@@ -79,6 +79,10 @@
         .filter-btn { background-color: var(--bg-primary); color: var(--text-muted); border: 1px solid var(--border-color); padding: 6px 14px; border-radius: 20px; cursor: pointer; transition: all 0.15s ease; font-weight: 600; font-size: 0.8rem; white-space: nowrap; }
         .filter-btn:hover { border-color: var(--accent); color: var(--text-main); }
         .filter-btn.active { background-color: var(--accent); color: white; border-color: var(--accent); }
+
+        /* Fix 1: 顯式補回 .view-content 隱藏類別，完美阻斷首次載入時的 FOUC 閃爍 */
+        .view-content { display: none; }
+        .view-content.active { display: block; }
 
         /* Kanban Layout Container */
         .kanban-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; align-items: start; }
@@ -119,31 +123,40 @@
         th { background-color: var(--bg-primary); color: var(--text-main); font-weight: 700; border-bottom: 2px solid var(--border-color); }
         tr:hover { background-color: var(--bg-primary); }
         
+        /* Fix 2: 完美補回 Table Status 樣式類別，解決標籤裸文字與移出按鈕樣式 */
+        .status-pill { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; }
+        .pill-backlog { background: #e2e8f0; color: #475569; }
+        .pill-procure { background: #fef3c7; color: #b45309; }
+        .pill-onsite { background: #dbeafe; color: #0369a1; }
+        .pill-installed { background: #d1fae5; color: #065f46; }
+
         /* iOS Bottom Navigation TabBar (rooms 模式核心) */
-        .ios-tabbar { position: fixed; bottom: 0; left: 0; right: 0; height: 74px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; z-index: 9999; padding-bottom: env(safe-area-inset-bottom); box-shadow: 0 -2px 10px rgba(0,0,0,0.03); }
+        .ios-tabbar { position: fixed; bottom: 0; left: 0; right: 0; height: 74px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; z-index: 9999; box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
+            /* Fix 6: 修正 iOS 頂級 Safe Area 拼寫，精確對接全面屏底部區域 */
+            padding-bottom: env(safe-area-inset-bottom); 
+        }
         .tab-item { display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; border: none; color: var(--text-muted); cursor: pointer; width: 65px; height: 100%; transition: color 0.15s; }
         .tab-item svg { width: 22px; height: 24px; margin-bottom: 3px; fill: currentColor; }
         .tab-item span { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2px; }
         .tab-item.active { color: var(--accent); }
 
-        /* System Category Badges */
-        .cat-infra { background: #f0fdfa; color: #0d9488; border: 1px solid #ccfbf1; } /* Mint / Teal */
-        .cat-living { background: #f5f3ff; color: #6d28d9; border: 1px solid #edd1ff; } /* 優雅紫 */
-        .cat-kitchen { background: #fffbeb; color: #b45309; border: 1px solid #fef3c7; } /* 琥珀橙 */
+        /* System Category Badges Style */
+        .cat-infra { background: #f0fdfa; color: #0d9488; border: 1px solid #ccfbf1; } 
+        .cat-living { background: #f5f3ff; color: #6d28d9; border: 1px solid #edd1ff; } 
+        .cat-kitchen { background: #fffbeb; color: #b45309; border: 1px solid #fef3c7; } 
         .cat-bath { background: #ecfeff; color: #0369a1; border: 1px solid #cffafe; }
         .cat-master { background: #fdf2f8; color: #be185d; border: 1px solid #fce7f3; }
         .cat-girls { background: #f0fdf4; color: #15803d; border: 1px solid #dcfce7; }
         .cat-soft { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
 
-        /* Fix 3: 確保 Toast 存在並有清晰的白瓷光澤感樣式定義 */
-        #toast { position: fixed; bottom: 90px; right: 20px; background: #1e293b; color: #ffffff; padding: 12px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; font-size: 0.85rem; font-weight: 600; z-index: 10000; }
+        #toast { position: fixed; bottom: 90px; right: 20px; background: #1e293b; color: white; padding: 12px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; font-size: 0.85rem; font-weight: 600; z-index: 10000; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo-area" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-            <h1>DRCS <span>v1.7.4_STABLE</span></h1>
+            <h1>DRCS <span>v1.7.6_ENTERPRISE_STABLE</span></h1>
             <p id="filtered-count-txt" style="font-size: 0.8rem; color: var(--accent); font-weight: 700;"></p>
         </div>
         <div class="dashboard-metrics">
@@ -213,7 +226,7 @@
                         <th>WBS分層</th>
                         <th>空間系統</th>
                         <th>核心用品組件</th>
-                        <th>性格設計與圖紙尺寸幾何規格參數</th>
+                        <th>性格設計與幾何規格參數 (圖紙對應)</th>
                         <th>直接前置依賴</th>
                         <th>財務成本</th>
                         <th>狀態</th>
@@ -266,7 +279,7 @@
     </div>
 
     <nav class="ios-tabbar">
-        <button class="tab-item active" id="tab-today" onclick="switchIosTab('today')">
+        <button class="tab-item" id="tab-today" onclick="switchIosTab('today')">
             <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
             <span>Today</span>
         </button>
@@ -290,364 +303,403 @@
 
     <div id="toast"></div>
 
-    <script>
-        const defaultDataset = [
-            { id: "INF-001", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "實心防盜加厚大門", desc: "重型結構，完美防噪密封膠條，將走廊外來師奶八卦雜音100%封鎖隔離。", dep: "ROOT_泥水找平", val: 8500, status: "onsite" },
-            { id: "INF-002", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "黑金屬智能電子鎖", desc: "支援指紋/手機遠端藍牙解鎖，大門口防狼狽掏鑰匙設計。", dep: "INF-001", val: 3500, status: "installed" },
-            { id: "INF-003", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "全屋房門/滑動木門 ✕ 5套", desc: "含不鏽鋼防撞鉸鏈與阻尼膠條。女兒房A房門與推椅動軌重疊，改為隱形滑動趟門以釋放幾何干涉。", dep: "ROOT_木工彈線", val: 12000, status: "procure" },
-            { id: "INF-004", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "極簡五金手把鎖芯組 ✕ 5套", desc: "把手全線視覺統一，高回彈阻尼靜音鎖體結構。", dep: "INF-003", val: 1500, status: "procure" },
-            { id: "INF-005", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "全屋高耐磨低甲醛木地板", desc: "一體通鋪延伸。需因應多邊形、多斜角鑽石型牆面進行現場精準放樣對縫裁切。", dep: "ROOT_泥水找平", val: 22000, status: "onsite" },
-            { id: "INF-006", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "app", layerText: "⚡ 終端電器", name: "分體式變頻冷氣機 ✕ 5部", desc: "客廳、主臥及兩間女兒房獨立配置，極致靜音節能，滿足多家庭成員熱舒適環境。", dep: "INF-007", val: 28000, status: "backlog" },
-            { id: "INF-007", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "不鏽鋼/啞光灰開關面板", desc: "全屋高密度面板放線，具備極佳的阻尼彈擊機械手感。", dep: "INF-009", val: 2200, status: "backlog" },
-            { id: "INF-008", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "13A雙位/自帶Type-C快充插座", desc: "沙發旁、床頭及書檯核心點位高密度安全放線。", dep: "INF-007", val: 1800, status: "backlog" },
-            { id: "INF-009", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "強電總配電箱(總掣箱)", desc: "工業級漏電斷路器(RCD)安全分路配置，生產級安全負載防線。", dep: "全屋總供電接入確認", val: 3200, status: "installed" },
+<script>
+    // Fix 5: 統一宣告全新 Storage 核心與動態版本防線
+    const STORAGE_VERSION = "v176";
+    const DATA_KEY = `drcs_dataset_${STORAGE_VERSION}`;
+    const STATE_KEY = `drcs_state_${STORAGE_VERSION}`;
+    const BUDGET_KEY = `drcs_budget_${STORAGE_VERSION}`;
 
-            { id: "LIV-001", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "main", layerText: "🔮 空間主體", name: "懸空式C字玄關櫃連隱藏燈帶", desc: "下懸空放常穿鞋與掃地機，中間置物槽預留嵌入式感應暖色燈帶。", dep: "ROOT_木工彈線", val: 14000, status: "backlog" },
-            { id: "LIV-002", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "main", layerText: "🔮 空間主體", name: "雙人座抗污科技布長沙發", desc: "尺寸限制檢測：長度控制在 1500mm-1600mm 內，完全防阻圓形地毯 (直徑975mm) 到東北走廊通道的動線衝突。", dep: "None", val: 7500, status: "procure" },
-            { id: "LIV-003", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "main", layerText: "🔮 空間主體", name: "伸縮岩板長方餐桌椅組", desc: "餐桌面長 1060mm，背靠斜邊牆體佈置，優化客廳公共停機坪空間動線。", dep: "None", val: 4800, status: "backlog" },
-            { id: "LIV-004", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "infra", layerText: "🧱 基礎硬裝", name: "無主燈線條天花軌道射燈組", desc: "順應鑽石型客廳多邊走向佈線，利用反射光源修正原始戶型視覺偏位缺陷。", dep: "木工天花吊頂完工", val: 5500, status: "backlog" },
+    // 歷史版本相容遷移鏈陣列 (Migration Targets)
+    const LEGACY_KEYS = [
+        "drcs_master_mutable_dataset_v172",
+        "drcs_dataset_v175",
+        "drcs_master_mutable_dataset"
+    ];
 
-            { id: "KIT-002", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "main", layerText: "🔮 空間主體", name: "客製化免拉手防潮櫥櫃組", desc: "因應鑽石斜牆做不規則斜度中島櫃身結構，內部嵌入阻尼阻尼導軌與五金拉籃。", dep: "木工現場彈線確認", val: 12000, status: "procure" },
-            { id: "KIT-001", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "main", layerText: "🔮 空間主體", name: "客製斜邊異型石英石檯面", desc: "深度 550mm-763mm 幾何斜切，需現場木模 1:1 精準放樣放量，抗滲透高硬度。", dep: "KIT-002", val: 9800, status: "onsite" },
-            { id: "KIT-003", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "main", layerText: "🔮 空間主體", name: "大單盆不鏽鋼槽+抽拉龍頭", desc: "深度下嵌，洗滌大鑊不濺水。拉出式冷熱龍頭全面清理不規則斜角中島檯面死角。", dep: "KIT-001", val: 2600, status: "onsite" },
-            { id: "KIT-004", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "app", layerText: "⚡ 終端電器", name: "側吸直排式強力抽油煙機", desc: "斜向爐具專用排煙引導。中式爆炒剋星，油煙在產源被阻截抽離。", dep: "KIT-002", val: 4500, status: "procure" },
+    const defaultDataset = [
+        { id: "INF-001", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "實心防盜加厚大門", desc: "重型加厚結構，完美隔音，封鎖走廊外來師奶八卦雜音。", dep: "泥水工程完工", val: 8500, status: "onsite" },
+        { id: "INF-002", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "黑金屬智能電子鎖", desc: "支援指紋/手機遠端，大門口防狼狽掏鑰匙設計。", dep: "INF-001", val: 3500, status: "installed" },
+        { id: "INF-003", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "全屋房門/滑動木門 ✕ 5套", desc: "含不鏽鋼防撞鉸鏈與阻尼膠條。女兒房A房門與推椅動軌重疊，改為隱形滑動趟門以釋放幾何干涉。", dep: "木工現場彈線確認", val: 12000, status: "procure" },
+        { id: "INF-004", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "極簡五金手把鎖芯組 ✕ 5套", desc: "把手全線視覺統一，高回彈阻尼靜音鎖體結構。", dep: "INF-003", val: 1500, status: "procure" },
+        { id: "INF-005", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "全屋高耐磨低甲醛木地板", desc: "一體通鋪延伸。需因應多邊形、多斜角鑽石型牆面進行現場精準放樣對縫裁切。", dep: "泥水基建工程完工", val: 22000, status: "onsite" },
+        { id: "INF-006", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "app", layerText: "⚡ 終端電器", name: "分體式變頻冷氣機 ✕ 5部", desc: "客廳、主臥及兩間女兒房獨立配置，極致靜音節能，滿足多家庭成員熱舒適環境。", dep: "INF-007", val: 28000, status: "backlog" },
+        { id: "INF-007", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "不鏽鋼/啞光灰開關面板", desc: "全屋高密度面板放線，具備極佳的阻尼彈擊機械手感。", dep: "INF-009", val: 2200, status: "backlog" },
+        { id: "INF-008", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "13A雙位/自帶Type-C快充插座", desc: "客廳沙發旁、床頭及書檯核心點位高密度放線，解決充電焦慮。", dep: "INF-007", val: 1800, status: "backlog" },
+        { id: "INF-009", zone: "INFRA", zoneText: "🚪 全屋與基礎", catClass: "cat-infra", layer: "infra", layerText: "🧱 基礎硬裝", name: "強電總配電箱(總掣箱)", desc: "工業級漏電斷路器(RCD)安全分路配置，生產級安全負載防線。", dep: "全屋總供電接入確認", val: 3200, status: "installed" },
 
-            { id: "BTH-001", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "main", layerText: "🔮 空間主體", name: "一體式懸空洗手盆櫃+鏡櫃", desc: "盆底不留死角方便地拖橫掃，鏡櫃隱藏收納全家人的洗漱用品。", dep: "泥水基建工程完工", val: 5200, status: "installed" },
-            { id: "BTH-002", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "main", layerText: "🔮 空間主體", name: "黑框極簡防爆玻璃浴屏", desc: "乾濕分離。企缸安裝淨寬度 825mm 鋼化安全防爆玻璃推拉門。", dep: "BTH-001", val: 4200, status: "onsite" },
-            { id: "BTH-004", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "app", layerText: "⚡ 終端電器", name: "天花式三合一浴室寶", desc: "冬天保溫，梅雨季節八口人的衣物集體烘乾完全離不開它。", dep: "INF-007", val: 2800, status: "installed" },
+        { id: "LIV-001", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "main", layerText: "🔮 空間主體", name: "懸空式C字玄關櫃連隱藏燈帶", desc: "下懸空放常穿鞋與掃地機，中間置物槽預留嵌入式感應暖色燈帶。", dep: "木工現場彈線確認", val: 14000, status: "backlog" },
+        { id: "LIV-002", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "main", layerText: "🔮 空間主體", name: "雙人座抗污科技布長沙發", desc: "尺寸限制檢測：長度控制在 1500mm-1600mm 內，完全防阻圓形地毯 (直徑975mm) 到東北走廊通道的動線衝突。", dep: "None", val: 7500, status: "procure" },
+        { id: "LIV-003", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "main", layerText: "🔮 空間主體", name: "伸縮岩板長方餐桌椅組", desc: "餐桌面長 1060mm，背靠斜邊牆體佈置，優化客廳公共停機坪空間動線。", dep: "None", val: 4800, status: "backlog" },
+        { id: "LIV-004", zone: "LIV", zoneText: "🛋️ 客廳公共區", catClass: "cat-living", layer: "infra", layerText: "🧱 基礎硬裝", name: "無主燈線條天花軌道射燈組", desc: "順應鑽石型客廳多邊走向佈線，利用反射光源修正原始戶型視覺偏位缺陷。", dep: "木工天花吊頂完工", val: 5500, status: "backlog" },
 
-            { id: "MST-001", zone: "MST", zoneText: "🛏️ 夫妻房綠洲", catClass: "cat-master", layer: "main", layerText: "🔮 空間主體", name: "液壓高張力油壓雙人床架", desc: "東北大房核心收納，配備重型挺桿，安全省力拉升儲存換季物資。", dep: "INF-005", val: 6500, status: "procure" },
-            { id: "MST-002", zone: "MST", zoneText: "🛏️ 夫妻房綠洲", catClass: "cat-master", layer: "soft", layerText: "🧺 軟裝雜項", name: "獨立袋裝彈簧五尺雙人床褥", desc: "尺寸 1500x1900mm。床邊通道預留淨寬 900mm 直通衛浴門，極致抗干擾睡眠環境。", dep: "MST-001", val: 8800, status: "procure" },
+        { id: "KIT-002", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "main", layerText: "🔮 空間主體", name: "客製化免拉手防潮櫥櫃組", desc: "因應鑽石斜牆做不規則斜度中島櫃身結構，內部嵌入阻尼阻尼導軌與五金拉籃。", dep: "木工現場彈線確認", val: 12000, status: "procure" },
+        { id: "KIT-001", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "main", layerText: "🔮 空間主體", name: "客製斜邊異型石英石檯面", desc: "深度 550mm-763mm 幾何斜切，需現場木模 1:1 精準放樣放量，抗滲透高硬度。", dep: "KIT-002", val: 9800, status: "onsite" },
+        { id: "KIT-003", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "main", layerText: "🔮 空間主體", name: "大單盆不鏽鋼槽+抽拉龍頭", desc: "深度下嵌，洗滌大鑊不濺水。拉出式冷熱龍頭全面清理不規則斜角中島檯面死角。", dep: "KIT-001", val: 2600, status: "onsite" },
+        { id: "KIT-004", zone: "KIT", zoneText: "🍳 廚房實驗室", catClass: "cat-kitchen", layer: "app", layerText: "⚡ 終端電器", name: "側吸直排式強力抽油煙機", desc: "斜向爐具專用排煙引導。中式爆炒剋星，油煙在產源被阻截抽離。", dep: "KIT-002", val: 4500, status: "procure" },
 
-            { id: "GRL-001", zone: "GRL", zoneText: "👩‍🎓 女兒房 ✕ 2", catClass: "cat-girls", layer: "main", layerText: "🔮 空間主體", name: "女兒房A：榻榻米L型床檯組合櫃", desc: "順應西南斜牆客製化。床架緊貼 1905mm 背牆，橫向無縫對接寬 1062mm 書檯面，極致壓榨平方數。", dep: "木工現場彈線確認", val: 15000, status: "backlog" },
-            { id: "GRL-002", zone: "GRL", zoneText: "👩‍🎓 女兒房 ✕ 2", catClass: "cat-girls", layer: "main", layerText: "🔮 空間主體", name: "女兒房B：窗台一體化超寬書檯連大衣櫃", desc: "利用東北大窗台擴展書檯工作深度，橫向無縫對接整排長 2400mm 頂天立地大衣櫃，滿足少女愛美收納。", dep: "木工現場彈線確認", val: 13000, status: "backlog" },
-            { id: "GRL-003", zone: "GRL", zoneText: "👩‍🎓 女兒房 ✕ 2", catClass: "cat-girls", layer: "soft", layerText: "🧺 軟裝雜項", name: "中學生高支撐人體工學網面椅 ✕ 2張", desc: "動態護腰。房A需預留後方 990mm 旋轉推移半徑，防止久坐卡碰後牆衣櫃。", dep: "None", val: 2400, status: "procure" },
-            { id: "GRL-004", zone: "GRL", zoneText: "👩‍🎓 女兒房 ✕ 2", catClass: "cat-girls", layer: "soft", layerText: "🧺 軟裝雜項", name: "單人高密度護脊床褥 ✕ 2張", desc: "尺寸分別依房A與房B工廠1:1客製。給予挑燈應戰DSE少女最硬核的脊椎支撐守護。", dep: "GRL-001", val: 6000, status: "procure" },
-            { id: "GRL-005", zone: "GRL", zoneText: "👩‍🎓 女兒房 ✕ 2", catClass: "cat-girls", layer: "soft", layerText: "🧺 軟裝雜項", name: "防眩光護眼LED書檯燈 ✕ 2盞", desc: "無重影、光照均勻，挑燈夜戰模擬題的最強輔助戰友。", dep: "INF-008", val: 1100, status: "backlog" }
-        ];
+        { id: "BTH-001", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "main", layerText: "🔮 空間主體", name: "一體式懸空洗手盆櫃+鏡櫃", desc: "盆底不留死角方便地拖橫掃，鏡櫃隱藏收納全家人的洗漱用品。", dep: "泥水基建工程完工", val: 5200, status: "installed" },
+        { id: "BTH-002", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "main", layerText: "🔮 空間主體", name: "黑框極簡玻璃浴屏門", desc: "乾濕分離。企缸安裝淨寬度 825mm 鋼化安全防爆玻璃推拉門。", dep: "BTH-001", val: 4200, status: "onsite" },
+        { id: "BTH-004", zone: "BTH", zoneText: "🚿 浴室洗滌室", catClass: "cat-bath", layer: "app", layerText: "⚡ 終端電器", name: "天花式三合一浴室寶", desc: "冬天保溫，梅雨季節八口人的衣物集體烘乾完全離不開它。", dep: "INF-007", val: 2800, status: "installed" },
 
-        let drcsMasterData = [];
-        let systemState = { view: 'today', zone: 'ALL', status: 'ALL', searchKeyword: '' };
-        let userTargetBudget = 250000;
+        { id: "MST-001", zone: "MST", zoneText: "🛏️ 夫妻房綠洲", catClass: "cat-master", layer: "main", layerText: "🔮 空間主體", name: "液壓高張力油壓雙人床架", desc: "東北大房核心收納，配備重型挺桿，安全省力拉升儲存換季物資。", dep: "INF-005", val: 6500, status: "procure" },
+        { id: "MST-002", zone: "MST", zoneText: "🛏️ 夫妻房綠洲", catClass: "cat-master", layer: "soft", layerText: "🧺 軟裝雜項", name: "獨立袋裝彈簧五尺雙人床褥", desc: "尺寸 1500x1900mm。床邊通道預留淨寬 900mm 直通衛浴門，極致抗干擾睡眠環境。", dep: "MST-001", val: 8800, status: "procure" },
 
-        function initStore() {
-            const localData = localStorage.getItem('drcs_master_mutable_dataset_v172');
-            if (localData) {
-                try { drcsMasterData = JSON.parse(localData); } catch(e) { drcsMasterData = [...defaultDataset]; }
-            } else {
-                drcsMasterData = [...defaultDataset];
-                localStorage.setItem('drcs_master_mutable_dataset_v172', JSON.stringify(drcsMasterData));
-            }
+        { id: "GRL-001", zone: "GRL", zoneText: "👩‍🎓 女兒房 ✕ 2", catClass: "cat-girls", layer: "main", layerText: "🔮 空間主體", name: "女兒房A：榻榻米L型床檯組合櫃", desc: "順應西南斜牆客製化。床架緊貼 1905mm 背牆，橫向無縫對接寬 1062mm 書檯面，極致壓榨平方數。", dep: "木工現場彈線確認", val: 15000, status: "backlog" },
+        { id: "GRL-002", zone: "GRL", zoneText: "👩‍🎓 女兒房 ✕ 2", catClass: "cat-girls", layer: "main", layerText: "🔮 空間主體", name: "女兒房B：窗台一體化超寬書檯連大衣櫃", desc: "利用東北大窗台擴展書檯工作深度，橫向無縫對接整排長 2400mm 頂天立地大衣櫃，滿足少女愛美收納。", dep: "木工現場彈線確認", val: 13000, status: "backlog" },
+        { id: "GRL-003", zone: "GRL", zoneText: "👩‍🎓 女兒房 ✕ 2", catClass: "cat-girls", layer: "soft", layerText: "🧺 軟裝雜項", name: "中學生高支撐人體工學網面椅 ✕ 2張", desc: "動態護腰。房A需預留後方 990mm 旋轉推移半徑，防止久坐卡碰後牆衣櫃。", dep: "None", val: 2400, status: "procure" },
+        { id: "GRL-004", zone: "GRL", zoneText: "👩‍🎓 女兒房 ✕ 2", catClass: "cat-girls", layer: "soft", layerText: "🧺 軟裝雜項", name: "單人高密度護脊床褥 ✕ 2張", desc: "尺寸分別依房A與房B工廠1:1客製。給予挑燈應戰DSE少女最硬核的脊椎支撐守護。", dep: "GRL-001", val: 6000, status: "procure" },
+        { id: "GRL-005", zone: "GRL", zoneText: "👩‍🎓 女兒房 ✕ 2", catClass: "cat-girls", layer: "soft", layerText: "🧺 軟裝雜項", name: "防眩光護眼LED書檯燈 ✕ 2盞", desc: "無重影、光照均勻，挑燈夜戰模擬題的最強輔助戰友。", dep: "INF-008", val: 1100, status: "backlog" }
+    ];
 
-            const savedBudget = localStorage.getItem('drcs_user_target_budget_v172');
-            if (savedBudget) { userTargetBudget = parseInt(savedBudget) || 250000; }
+    let drcsMasterData = [];
+    let systemState = { view: 'today', zone: 'ALL', status: 'ALL', searchKeyword: '' };
+    let userTargetBudget = 250000;
 
-            const savedState = localStorage.getItem('drcs_v172_view_state');
-            if (savedState) {
-                try {
-                    systemState = JSON.parse(savedState);
-                    document.getElementById('search-bar').value = systemState.searchKeyword;
-                } catch(e) {}
-            }
-            updateTabUI();
-            renderEngine();
-        }
-
-        function saveStore() { 
-            localStorage.setItem('drcs_master_mutable_dataset_v172', JSON.stringify(drcsMasterData));
-            localStorage.setItem('drcs_user_target_budget_v172', userTargetBudget.toString());
-            localStorage.setItem('drcs_v172_view_state', JSON.stringify(systemState)); 
-        }
-
-        function switchIosTab(tabId) {
-            systemState.view = tabId;
-            saveStore();
-            updateTabUI();
-            renderEngine();
-            showToast(`已切換模組: ${tabId.toUpperCase()}`);
-        }
-
-        function modifyTargetBudget() {
-            const newBudget = prompt("請輸入您期望控管的【裝修目標總預算】金額 (HKD)：", userTargetBudget);
-            if (newBudget !== null) {
-                const parsed = parseInt(newBudget);
-                if (!isNaN(parsed) && parsed > 0) {
-                    userTargetBudget = parsed; saveStore(); renderEngine();
-                    showToast(`[預算調整] 目標總預算更新為: HK$ ${userTargetBudget.toLocaleString()}`);
-                } else { alert("請輸入有效的正整數金額！"); }
+    function initStore() {
+        // Fix 5: 執行歷史快取深拷貝自動資料移轉管道 (Smooth Migration Engine)
+        if (!localStorage.getItem(DATA_KEY)) {
+            for (const legacyKey of LEGACY_KEYS) {
+                const legacyData = localStorage.getItem(legacyKey);
+                if (legacyData) {
+                    localStorage.setItem(DATA_KEY, legacyData);
+                    console.log(`[DRCS DATA MIGRATION] 成功將歷史大盤數據從 ${legacyKey} 移轉到當前穩定版 ${DATA_KEY}`);
+                    break;
+                }
             }
         }
 
-        function editItemInline(id) {
-            const match = drcsMasterData.find(i => i.id === id);
-            if(!match) return;
-
-            const newName = prompt(`[修改組件 ${id}] 請輸入全新用品名稱：`, match.name);
-            if (newName === null || newName.trim() === "") return;
-
-            const newVal = prompt(`[修改組件 ${id}] 請輸入全新預算價錢 (HKD)：`, match.val);
-            if (newVal === null) return;
-            const parsedVal = parseInt(newVal);
-            if (isNaN(parsedVal) || parsedVal < 0) { alert("金額格式錯誤！"); return; }
-
-            match.name = newName.trim(); match.val = parsedVal;
-            saveStore(); renderEngine();
-            showToast(`[組件更新] ${id} 規格參數已完成重編！`);
+        // 載入當前版本專屬資料庫
+        const localData = localStorage.getItem(DATA_KEY);
+        if (localData) {
+            try { drcsMasterData = JSON.parse(localData); } catch(e) { drcsMasterData = [...defaultDataset]; }
+        } else {
+            drcsMasterData = [...defaultDataset];
+            localStorage.setItem(DATA_KEY, JSON.stringify(drcsMasterData));
         }
 
-        function handleCreateItem(e) {
-            e.preventDefault();
-            const id = document.getElementById('input-id').value.trim().toUpperCase();
-            const name = document.getElementById('input-name').value.trim();
-            const desc = document.getElementById('input-desc').value.trim();
-            const zone = document.getElementById('input-zone').value;
-            const layer = document.getElementById('input-layer').value;
-            const dep = document.getElementById('input-dep').value.trim();
-            const val = parseInt(document.getElementById('input-val').value) || 0;
-            const status = document.getElementById('input-status').value;
+        const savedBudget = localStorage.getItem(BUDGET_KEY);
+        if (savedBudget) { userTargetBudget = parseInt(savedBudget) || 250000; }
 
-            if(drcsMasterData.some(item => item.id === id)) { alert(`⚠️ 元件代碼 [ ${id} ] 重複！`); return; }
+        const savedState = localStorage.getItem(STATE_KEY);
+        if (savedState) {
+            try { systemState = JSON.parse(savedState); } catch(e) {}
+        }
+        
+        document.getElementById('search-bar').value = systemState.searchKeyword || '';
+        updateTabUI();
+        renderEngine();
+    }
 
-            const zoneTextMap = { INFRA:"🚪 全屋與基礎", LIV:"🛋️ 客廳公共區", KIT:"🍳 廚房實驗室", BTH:"🚿 浴室洗滌室", MST:"🛏️ 夫妻房綠洲", GRL:"👩‍🎓 女兒房 ✕ 2", SOFT:"🧺 後期軟裝雜項" };
-            const catClassMap = { INFRA:"cat-infra", LIV:"cat-living", KIT:"cat-kitchen", BTH:"cat-bath", MST:"cat-master", GRL:"cat-girls", SOFT:"cat-soft" };
-            const layerTextMap = { infra: "🧱 基礎硬裝", main: "🔮 空間主體", app: "⚡ 終端電器", soft: "🧺 軟裝雜項" };
+    function saveStore() { 
+        localStorage.setItem(DATA_KEY, JSON.stringify(drcsMasterData));
+        localStorage.setItem(BUDGET_KEY, userTargetBudget.toString());
+        localStorage.setItem(STATE_KEY, JSON.stringify(systemState)); 
+    }
 
-            const newItem = { id, zone, zoneText: zoneTextMap[zone], catClass: catClassMap[zone], layer, layerText: layerTextMap[layer], name, desc, dep, val, status };
-            drcsMasterData.push(newItem);
-            
-            saveStore(); renderEngine();
-            showToast(`[CRUD 成功] 自訂組件 ${id} 已成功注入排產核心！`);
-            document.getElementById('input-id').value = ''; document.getElementById('input-name').value = '';
-            document.getElementById('input-desc').value = ''; document.getElementById('input-val').value = '';
+    function modifyTargetBudget() {
+        const newBudget = prompt("請輸入您期望控管的【裝修目標總預算】金額 (HKD)：", userTargetBudget);
+        if (newBudget !== null) {
+            const parsed = parseInt(newBudget);
+            if (!isNaN(parsed) && parsed > 0) {
+                userTargetBudget = parsed; saveStore(); renderEngine();
+                showToast(`[預算調整] 目標總預算更新為: HK$ ${userTargetBudget.toLocaleString()}`);
+            } else { alert("請輸入有效的正整數金額！"); }
+        }
+    }
+
+    function editItemInline(id) {
+        const match = drcsMasterData.find(i => i.id === id);
+        if(!match) return;
+
+        const newName = prompt(`[修改組件 ${id}] 請輸入全新用品名稱：`, match.name);
+        if (newName === null || newName.trim() === "") return;
+
+        const newVal = prompt(`[修改組件 ${id}] 請輸入全新預算價錢 (HKD)：`, match.val);
+        if (newVal === null) return;
+        const parsedVal = parseInt(newVal);
+        if (isNaN(parsedVal) || parsedVal < 0) { alert("金額格式錯誤！"); return; }
+
+        match.name = escapeHtml(newName.trim()); 
+        match.val = parsedVal;
+        saveStore(); renderEngine();
+        showToast(`[組件更新] ${id} 規格參數已完成重編！`);
+    }
+
+    function handleCreateItem(e) {
+        e.preventDefault();
+        const id = document.getElementById('input-id').value.trim().toUpperCase();
+        
+        // Fix 3: UID 引入嚴格字元白名單，徹底斷絕特殊符號閉合 HTML Attribute 漏洞
+        if(!/^[A-Z0-9\-_]+$/.test(id)){
+            alert("⚠️ 錯誤：UID 格式不合法！僅允許大寫英文字母、數字、中劃線及下劃線。");
+            return;
         }
 
-        function handleDeleteItem(id) {
-            if(confirm(`🚨 您確定要從排產大盤中永久移出組件 [ ${id} ] 嗎？`)) {
-                drcsMasterData = drcsMasterData.filter(item => item.id !== id);
-                saveStore(); renderEngine(); showToast(`[CRUD 刪除] 組件 ${id} 已移出排產線。`);
-            }
+        const name = escapeHtml(document.getElementById('input-name').value.trim());
+        const desc = escapeHtml(document.getElementById('input-desc').value.trim());
+        const dep = escapeHtml(document.getElementById('input-dep').value.trim().toUpperCase());
+
+        const zone = document.getElementById('input-zone').value;
+        const layer = document.getElementById('input-layer').value;
+        const val = parseInt(document.getElementById('input-val').value) || 0;
+        const status = document.getElementById('input-status').value;
+
+        if(drcsMasterData.some(item => item.id === id)) { alert(`⚠️ 元件代碼 [ ${id} ] 重複！`); return; }
+
+        const zoneTextMap = { INFRA:"🚪 全屋與基礎", LIV:"🛋️ 客廳公共區", KIT:"🍳 廚房實驗室", BTH:"🚿 浴室洗滌室", MST:"🛏️ 夫妻房綠洲", GRL:"👩‍🎓 女兒房 ✕ 2", SOFT:"🧺 後期軟裝雜項" };
+        const catClassMap = { INFRA:"cat-infra", LIV:"cat-living", KIT:"cat-kitchen", BTH:"cat-bath", MST:"cat-master", GRL:"cat-girls", SOFT:"cat-soft" };
+        const layerTextMap = { infra: "🧱 基礎硬裝", main: "🔮 空間主體", app: "⚡ 終端電器", soft: "🧺 軟裝雜項" };
+
+        const newItem = { id, zone, zoneText: zoneTextMap[zone], catClass: catClassMap[zone], layer, layerText: layerTextMap[layer], name, desc, dep, val, status };
+        drcsMasterData.push(newItem);
+        
+        saveStore(); renderEngine();
+        showToast(`[CRUD 成功] 自訂組件 ${id} 已成功注入排產核心！`);
+        document.getElementById('input-id').value = ''; document.getElementById('input-name').value = '';
+        document.getElementById('input-desc').value = ''; document.getElementById('input-val').value = '';
+    }
+
+    function handleDeleteItem(id) {
+        if(confirm(`🚨 您確定要從排產大盤中永久移出組件 [ ${id} ] 嗎？`)) {
+            drcsMasterData = drcsMasterData.filter(item => item.id !== id);
+            saveStore(); renderEngine(); showToast(`[CRUD 刪除] 組件 ${id} 已移出排產線。`);
         }
+    }
 
-        function setZoneFilter(zoneCode) { systemState.zone = zoneCode; saveStore(); updateTabUI(); renderEngine(); }
-        function setStatusFilter(statusCode) { systemState.status = statusCode; saveStore(); updateTabUI(); renderEngine(); }
-        function handleSearch(val) { systemState.searchKeyword = val.trim(); saveStore(); renderEngine(); }
+    function setZoneFilter(zoneCode) { systemState.zone = zoneCode; saveStore(); updateTabUI(); renderEngine(); }
+    function setStatusFilter(statusCode) { systemState.status = statusCode; saveStore(); updateTabUI(); renderEngine(); }
+    function handleSearch(val) { systemState.searchKeyword = val.trim(); saveStore(); renderEngine(); }
 
-        // Fix 4: Regex 安全防禦轉義，杜絕 Regex Injection 崩潰隱患
-        function escapeRegExp(string) {
-            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        }
+    // Fix 1: 完美修復轉義字串語法衝突，改為嚴格的 &#039; 實體化處理
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
 
-        function highlightText(text, keyword) {
-            if (!keyword) return text;
-            const escapedKeyword = escapeRegExp(keyword);
-            const regex = new RegExp(`(${escapedKeyword})`, 'gi');
-            return text.replace(regex, '<mark>$1</mark>');
-        }
+    function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
 
-        function handleDragStart(e, itemId) { e.dataTransfer.setData("text/plain", itemId); }
-        function allowDrop(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
-        function dragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
-        function handleDrop(e, targetStatus) {
-            e.preventDefault(); e.currentTarget.classList.remove('drag-over');
-            const itemId = e.dataTransfer.getData("text/plain");
-            const matchItem = drcsMasterData.find(i => i.id === itemId);
-            if(matchItem) { matchItem.status = targetStatus; saveStore(); renderEngine(); showToast(`[狀態遞變] ${matchItem.name} ➔ ${targetStatus}`); }
-        }
+    function highlightText(text, keyword) {
+        if (!keyword) return text;
+        const escapedKeyword = escapeRegExp(keyword);
+        const regex = new RegExp(`(${escapedKeyword})`, 'gi');
+        return text.replace(regex, '<mark>$1</mark>');
+    }
 
-        // Fix 5: 拓撲樹狀圖引入 Set 循環相依閉環保護 (Cycle Protection)
-        function buildTrueDependencyTree() {
-            const treeContainer = document.getElementById('tree-root-node');
-            treeContainer.innerHTML = "";
-            const rootItems = drcsMasterData.filter(item => !drcsMasterData.some(parent => parent.id === item.dep));
-            
-            const visitedTracker = new Set(); // 初始化走訪追蹤器
+    // Fix 3: 建立高內聚安全管道函數，在邏輯層面鎖死轉義與高亮的先後工序
+    function safeHighlight(text, keyword) {
+        const cleanText = escapeHtml(text);
+        return highlightText(cleanText, keyword);
+    }
 
-            rootItems.forEach((root, idx) => {
-                treeContainer.insertAdjacentHTML('beforeend', createTreeNodeHTML(root, idx === rootItems.length - 1, 0, visitedTracker));
-            });
-        }
+    function handleDragStart(e, itemId) { e.dataTransfer.setData("text/plain", itemId); }
+    function allowDrop(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+    function dragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+    function handleDrop(e, targetStatus) {
+        e.preventDefault(); e.currentTarget.classList.remove('drag-over');
+        const itemId = e.dataTransfer.getData("text/plain");
+        const matchItem = drcsMasterData.find(i => i.id === itemId);
+        if(matchItem) { matchItem.status = targetStatus; saveStore(); renderEngine(); showToast(`[狀態遞變] ${matchItem.name} ➔ ${targetStatus}`); }
+    }
 
-        function createTreeNodeHTML(node, isLast, depth, visited) {
-            // 如果當前節點已經出現在走訪路徑中，說明發生循環死鎖閉環，立即熔斷阻截
-            if (visited.has(node.id)) {
-                return `
-                    <div class="tree-node ${isLast ? 'last' : ''}">
-                        <div class="tree-content-wrapper" style="border-color: var(--accent-danger); background: #fef2f2;">
-                            <strong style="color: var(--accent-danger); font-family: monospace;">⚠️ 循環衝突死鎖: ${node.id}</strong>
-                            <span style="color: var(--accent-danger); font-size: 0.75rem;">(偵測到密閉依賴鏈，遞迴已安全熔斷)</span>
-                        </div>
-                    </div>
-                `;
-            }
+    function buildTrueDependencyTree() {
+        const treeContainer = document.getElementById('tree-root-node');
+        if (!treeContainer) return;
+        treeContainer.innerHTML = "";
+        
+        const rootItems = drcsMasterData.filter(item => !drcsMasterData.some(parent => parent.id === item.dep));
+        
+        // Fix 4: 各樹根分支單獨分配獨立的 Set 實體，徹底免除跨路徑交叉污染與誤判
+        rootItems.forEach((root, idx) => {
+            treeContainer.insertAdjacentHTML('beforeend', createTreeNodeHTML(root, idx === rootItems.length - 1, 0, new Set()));
+        });
+    }
 
-            // 紀錄當前節點
-            visited.add(node.id);
-
-            const statusColor = node.status === 'installed' ? 'var(--accent-success)' : (node.status === 'onsite' ? 'var(--accent-hover)' : 'var(--text-muted)');
-            const hName = highlightText(node.name, systemState.searchKeyword);
-            let html = `
+    function createTreeNodeHTML(node, isLast, depth, visited) {
+        if (visited.has(node.id)) {
+            return `
                 <div class="tree-node ${isLast ? 'last' : ''}">
-                    <div class="tree-content-wrapper" onclick="editItemInline('${node.id}')" style="cursor:pointer;" title="點擊快速修改名稱及價格">
-                        <strong style="color:var(--accent-hover); font-family:monospace;">${node.id}</strong>
-                        <span>${hName}</span>
-                        <span class="tree-status" style="background:${statusColor}22; color:${statusColor}; border:1px solid ${statusColor}44;">${node.status}</span>
-                        <span style="color:var(--text-muted); font-size:0.75rem;">(HK$ ${node.val.toLocaleString()}) ⚙️</span>
+                    <div class="tree-content-wrapper" style="border-color: var(--accent-danger); background: #fef2f2;">
+                        <strong style="color: var(--accent-danger); font-family: monospace;">⚠️ 循環衝突死鎖: ${node.id}</strong>
+                        <span style="color: var(--accent-danger); font-size: 0.75rem;">(偵測到密閉依賴鏈，遞迴已安全熔斷)</span>
                     </div>
                 </div>
             `;
-            const children = drcsMasterData.filter(child => child.dep === node.id);
-            if (children.length > 0) {
-                children.forEach((child, cIdx) => { 
-                    html += createTreeNodeHTML(child, cIdx === children.length - 1, depth + 1, visited); 
-                });
-            }
-
-            // 遞迴返回時將目前節點移出路徑
-            visited.delete(node.id);
-            return html;
         }
 
-        function renderReportView(layerBudgets) {
-            const holder = document.getElementById('layer-grid-holder');
-            holder.innerHTML = `
-                <div class="layer-card layer-infra"><h4>1. 基礎硬裝基礎層</h4><div class="layer-card-meta"><span>應分配預算:</span><span>HK$ ${layerBudgets.infra.t.toLocaleString()}</span></div><div class="layer-card-meta"><span>已核銷完工:</span><span style="color:var(--accent-success)">HK$ ${layerBudgets.infra.s.toLocaleString()}</span></div></div>
-                <div class="layer-card layer-main"><h4>2. 空間主體家具層</h4><div class="layer-card-meta"><span>應分配預算:</span><span>HK$ ${layerBudgets.main.t.toLocaleString()}</span></div><div class="layer-card-meta"><span>已核銷完工:</span><span style="color:var(--accent-success)">HK$ ${layerBudgets.main.s.toLocaleString()}</span></div></div>
-                <div class="layer-card layer-app"><h4>3. 終端機電電器層</h4><div class="layer-card-meta"><span>應分配預算:</span><span>HK$ ${layerBudgets.app.t.toLocaleString()}</span></div><div class="layer-card-meta"><span>已核銷完工:</span><span style="color:var(--accent-success)">HK$ ${layerBudgets.app.s.toLocaleString()}</span></div></div>
-                <div class="layer-card layer-soft"><h4>4. 軟裝與生活雜項層</h4><div class="layer-card-meta"><span>應分配預算:</span><span>HK$ ${layerBudgets.soft.t.toLocaleString()}</span></div><div class="layer-card-meta"><span>已核銷完工:</span><span style="color:var(--accent-success)">HK$ ${layerBudgets.soft.s.toLocaleString()}</span></div></div>
-            `;
-        }
+        visited.add(node.id);
 
-        // Fix 1 & 2: 修正為 iOS 原生 .tab-item 類別選擇器與帶有前綴的 'view-' 容器識別
-        function updateTabUI() {
-            // 修正 1：同步更新底部所有 .tab-item 的 active 狀態外觀
-            document.querySelectorAll('.ios-tabbar .tab-item').forEach(b => b.classList.remove('active'));
-            const activeTab = document.getElementById(`tab-${systemState.view}`);
-            if(activeTab) activeTab.classList.add('active');
-
-            // 頂部 Capsule 膠囊過濾按鈕外觀同步
-            document.querySelectorAll('#zone-filters .filter-btn').forEach(b => {
-                b.classList.remove('active'); if(b.getAttribute('data-zone') === systemState.zone) b.classList.add('active');
+        const statusColor = node.status === 'installed' ? 'var(--accent-success)' : (node.status === 'onsite' ? 'var(--accent-hover)' : 'var(--text-muted)');
+        
+        // 使用安全高亮管道
+        const hName = safeHighlight(node.name, systemState.searchKeyword);
+        let html = `
+            <div class="tree-node ${isLast ? 'last' : ''}">
+                <div class="tree-content-wrapper" onclick="editItemInline('${node.id}')" style="cursor:pointer;" title="點擊快速修改名稱及價格">
+                    <strong style="color:var(--accent-hover); font-family:monospace;">${node.id}</strong>
+                    <span>${hName}</span>
+                    <span class="tree-status" style="background:${statusColor}22; color:${statusColor}; border:1px solid ${statusColor}44;">${node.status}</span>
+                    <span style="color:var(--text-muted); font-size:0.75rem;">(HK$ ${node.val.toLocaleString()}) ⚙️</span>
+                </div>
+            </div>
+        `;
+        const children = drcsMasterData.filter(child => child.dep === node.id);
+        if (children.length > 0) {
+            children.forEach((child, cIdx) => { 
+                html += createTreeNodeHTML(child, cIdx === children.length - 1, depth + 1, visited); 
             });
-            document.querySelectorAll('#status-filters .filter-btn').forEach(b => {
-                b.classList.remove('active'); if(b.getAttribute('data-status') === systemState.status) b.classList.add('active');
-            });
-
-            // 修正 2：精確隱藏與顯示對應的 'view-' 前綴視圖主畫布
-            document.querySelectorAll('.view-content').forEach(v => v.style.display = 'none');
-            const targetView = document.getElementById(`view-${systemState.view}`);
-            if(targetView) targetView.style.display = 'block';
         }
 
-        function showToast(txt) {
-            const t = document.getElementById('toast'); 
-            if(t) {
-                t.innerText = txt; t.style.display = 'block';
-                setTimeout(() => { t.style.display = 'none'; }, 3000);
+        visited.delete(node.id);
+        return html;
+    }
+
+    function renderReportView(layerBudgets) {
+        const holder = document.getElementById('layer-grid-holder');
+        if(!holder) return;
+        holder.innerHTML = `
+            <div class="layer-card layer-infra"><h4>1. 基礎硬裝基礎層</h4><div class="layer-card-meta"><span>應分配預算:</span><span>HK$ ${layerBudgets.infra.t.toLocaleString()}</span></div><div class="layer-card-meta"><span>已核銷完工:</span><span style="color:var(--accent-success)">HK$ ${layerBudgets.infra.s.toLocaleString()}</span></div></div>
+            <div class="layer-card layer-main"><h4>2. 空間主體家具層</h4><div class="layer-card-meta"><span>應分配預算:</span><span>HK$ ${layerBudgets.main.t.toLocaleString()}</span></div><div class="layer-card-meta"><span>已核銷完工:</span><span style="color:var(--accent-success)">HK$ ${layerBudgets.main.s.toLocaleString()}</span></div></div>
+            <div class="layer-card layer-app"><h4>3. 終端機電電器層</h4><div class="layer-card-meta"><span>應分配預算:</span><span>HK$ ${layerBudgets.app.t.toLocaleString()}</span></div><div class="layer-card-meta"><span>已核銷完工:</span><span style="color:var(--accent-success)">HK$ ${layerBudgets.app.s.toLocaleString()}</span></div></div>
+            <div class="layer-card layer-soft"><h4>4. 軟裝與生活雜項層</h4><div class="layer-card-meta"><span>應分配預算:</span><span>HK$ ${layerBudgets.soft.t.toLocaleString()}</span></div><div class="layer-card-meta"><span>已核銷完工:</span><span style="color:var(--accent-success)">HK$ ${layerBudgets.soft.s.toLocaleString()}</span></div></div>
+        `;
+    }
+
+    function updateTabUI() {
+        document.querySelectorAll('.ios-tabbar .tab-item').forEach(b => b.classList.remove('active'));
+        const activeTab = document.getElementById(`tab-${systemState.view}`);
+        if(activeTab) activeTab.classList.add('active');
+
+        document.querySelectorAll('#zone-filters .filter-btn').forEach(b => {
+            b.classList.remove('active'); if(b.getAttribute('data-zone') === systemState.zone) b.classList.add('active');
+        });
+        document.querySelectorAll('#status-filters .filter-btn').forEach(b => {
+            b.classList.remove('active'); if(b.getAttribute('data-status') === systemState.status) b.classList.add('active');
+        });
+
+        // 大畫布切換控制
+        document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+        const targetView = document.getElementById(`view-${systemState.view}`);
+        if(targetView) targetView.classList.add('active');
+    }
+
+    function showToast(txt) {
+        const t = document.getElementById('toast'); 
+        if(t) {
+            t.innerText = txt; t.style.display = 'block';
+            setTimeout(() => { t.style.display = 'none'; }, 3000);
+        }
+    }
+
+    function renderEngine() {
+        const backlogHolder = document.querySelector('#col-backlog .holder');
+        const procureHolder = document.querySelector('#col-procure .holder');
+        const onsiteHolder = document.querySelector('#col-onsite .holder');
+        const installedHolder = document.querySelector('#col-installed .holder');
+        const gridTbody = document.getElementById('grid-tbody');
+
+        if(backlogHolder) backlogHolder.innerHTML = ''; if(procureHolder) procureHolder.innerHTML = '';
+        if(onsiteHolder) onsiteHolder.innerHTML = ''; if(installedHolder) installedHolder.innerHTML = '';
+        if(gridTbody) gridTbody.innerHTML = '';
+
+        let colCounts = { backlog: 0, procure: 0, onsite: 0, installed: 0 };
+        let filteredCount = 0;
+        let layerBudgets = { infra: { t: 0, s: 0 }, main: { t: 0, s: 0 }, app: { t: 0, s: 0 }, soft: { t: 0, s: 0 } };
+        let totalItemsValue = 0, capitalizationSpent = 0;
+
+        const kw = systemState.searchKeyword.toLowerCase();
+
+        drcsMasterData.forEach(item => {
+            layerBudgets[item.layer].t += item.val;
+            totalItemsValue += item.val;
+            if(item.status === 'installed') { layerBudgets[item.layer].s += item.val; capitalizationSpent += item.val; }
+
+            if (systemState.zone !== "ALL" && item.zone !== systemState.zone) return;
+            if (systemState.status !== "ALL" && item.status !== systemState.status) return;
+            if (kw && !(item.id.toLowerCase().includes(kw) || item.name.toLowerCase().includes(kw) || item.desc.toLowerCase().includes(kw) || item.dep.toLowerCase().includes(kw))) return;
+
+            filteredCount++; colCounts[item.status]++;
+
+            // 走安全防禦級安全高亮管道 (safeHighlight)
+            const hName = safeHighlight(item.name, systemState.searchKeyword);
+            const hDesc = safeHighlight(item.desc, systemState.searchKeyword);
+            const hDep = safeHighlight(item.dep, systemState.searchKeyword);
+
+            if (systemState.view === "today" && backlogHolder) {
+                const cardHtml = `
+                    <div class="kanban-card" draggable="true" ondragstart="handleDragStart(event, '${item.id}')">
+                        <button class="btn-delete" onclick="handleDeleteItem('${item.id}'); event.stopPropagation();">✕</button>
+                        <span class="card-tag ${item.catClass}">${item.zoneText}</span>
+                        <div class="card-title" onclick="editItemInline('${item.id}'); event.stopPropagation();" title="點擊修改名稱與價格">${hName} ⚙️</div>
+                        <div class="card-desc">${hDesc}</div>
+                        <div class="card-meta"><span>${item.id}</span><span style="font-weight:bold; color:var(--text-main)">HK$ ${item.val.toLocaleString()}</span></div>
+                    </div>
+                `;
+                if(item.status === 'backlog') backlogHolder.insertAdjacentHTML('beforeend', cardHtml);
+                if(item.status === 'procure') procureHolder.insertAdjacentHTML('beforeend', cardHtml);
+                if(item.status === 'onsite') onsiteHolder.insertAdjacentHTML('beforeend', cardHtml);
+                if(item.status === 'installed') installedHolder.insertAdjacentHTML('beforeend', cardHtml);
+            } else if (systemState.view === "log" && gridTbody) {
+                const rowHtml = `
+                    <tr>
+                        <td style="font-family: monospace; font-weight:700; color:var(--accent);">${item.id}</td>
+                        <td><span class="card-tag" style="border-left:3px solid var(--layer-${item.layer}); margin:0;">${item.layerText}</span></td>
+                        <td><span class="card-tag ${item.catClass}" style="margin:0;">${item.zoneText}</span></td>
+                        <td style="font-weight:700; cursor:pointer; color:var(--text-main);" onclick="editItemInline('${item.id}')" title="點擊快速編修">${hName} ⚙️</td>
+                        <td style="color:var(--text-muted); font-size:0.75rem; line-height:1.4;">${hDesc}</td>
+                        <td><span class="tree-connector">${hDep}</span></td>
+                        <td style="font-weight:700; font-family:monospace;">HK$ ${item.val.toLocaleString()}</td>
+                        <td><span class="status-pill pill-${item.status}">${item.status}</span></td>
+                        <td><button class="filter-btn" style="border-color:var(--accent-danger); color:var(--accent-danger); padding:4px 8px; font-size:0.7rem; background:#fff;" onclick="handleDeleteItem('${item.id}')">移出</button></td>
+                    </tr>
+                `;
+                gridTbody.insertAdjacentHTML('beforeend', rowHtml);
             }
+        });
+
+        if (systemState.view === "trends") buildTrueDependencyTree();
+        if (systemState.view === "report") renderReportView(layerBudgets);
+
+        if(document.getElementById('c-backlog')) {
+            document.getElementById('c-backlog').innerText = colCounts.backlog;
+            document.getElementById('c-procure').innerText = colCounts.procure;
+            document.getElementById('c-onsite').innerText = colCounts.onsite;
+            document.getElementById('c-installed').innerText = colCounts.installed;
         }
 
-        function renderEngine() {
-            const backlogHolder = document.querySelector('#col-backlog .holder');
-            const procureHolder = document.querySelector('#col-procure .holder');
-            const onsiteHolder = document.querySelector('#col-onsite .holder');
-            const installedHolder = document.querySelector('#col-installed .holder');
-            const gridTbody = document.getElementById('grid-tbody');
-
-            if(backlogHolder) backlogHolder.innerHTML = ''; if(procureHolder) procureHolder.innerHTML = '';
-            if(onsiteHolder) onsiteHolder.innerHTML = ''; if(installedHolder) installedHolder.innerHTML = '';
-            if(gridTbody) gridTbody.innerHTML = '';
-
-            let colCounts = { backlog: 0, procure: 0, onsite: 0, installed: 0 };
-            let filteredCount = 0;
-            let layerBudgets = { infra: { t: 0, s: 0 }, main: { t: 0, s: 0 }, app: { t: 0, s: 0 }, soft: { t: 0, s: 0 } };
-            let totalItemsValue = 0, capitalizationSpent = 0;
-
-            const kw = systemState.searchKeyword.toLowerCase();
-
-            drcsMasterData.forEach(item => {
-                layerBudgets[item.layer].t += item.val;
-                totalItemsValue += item.val;
-                if(item.status === 'installed') { layerBudgets[item.layer].s += item.val; capitalizationSpent += item.val; }
-
-                if (systemState.zone !== "ALL" && item.zone !== systemState.zone) return;
-                if (systemState.status !== "ALL" && item.status !== systemState.status) return;
-                if (kw && !(item.name.toLowerCase().includes(kw) || item.desc.toLowerCase().includes(kw) || item.dep.toLowerCase().includes(kw) || item.id.toLowerCase().includes(kw))) return;
-
-                filteredCount++; colCounts[item.status]++;
-
-                const hName = highlightText(item.name, systemState.searchKeyword);
-                const hDesc = highlightText(item.desc, systemState.searchKeyword);
-                const hDep = highlightText(item.dep, systemState.searchKeyword);
-
-                if (systemState.view === "today" && backlogHolder) {
-                    const cardHtml = `
-                        <div class="kanban-card" draggable="true" ondragstart="handleDragStart(event, '${item.id}')">
-                            <button class="btn-delete" onclick="handleDeleteItem('${item.id}'); event.stopPropagation();">✕</button>
-                            <span class="card-tag ${item.catClass}">${item.zoneText}</span>
-                            <div class="card-title" onclick="editItemInline('${item.id}'); event.stopPropagation();" title="點擊修改名稱與價格">${hName} ⚙️</div>
-                            <div class="card-desc">${hDesc}</div>
-                            <div class="card-meta"><span>${item.id}</span><span style="font-weight:bold;">HK$ ${item.val.toLocaleString()}</span></div>
-                        </div>
-                    `;
-                    if(item.status === 'backlog') backlogHolder.insertAdjacentHTML('beforeend', cardHtml);
-                    if(item.status === 'procure') procureHolder.insertAdjacentHTML('beforeend', cardHtml);
-                    if(item.status === 'onsite') onsiteHolder.insertAdjacentHTML('beforeend', cardHtml);
-                    if(item.status === 'installed') installedHolder.insertAdjacentHTML('beforeend', cardHtml);
-                } else if (systemState.view === "log" && gridTbody) {
-                    const rowHtml = `
-                        <tr>
-                            <td style="font-family: monospace; font-weight:700; color:var(--accent-hover);">${item.id}</td>
-                            <td><span class="card-tag" style="border-left:3px solid var(--layer-${item.layer}); margin:0;">${item.layerText}</span></td>
-                            <td><span class="card-tag ${item.catClass}" style="margin:0;">${item.zoneText}</span></td>
-                            <td style="font-weight:700; cursor:pointer;" onclick="editItemInline('${item.id}')" title="點擊快速修改名稱及價格">${hName} ⚙️</td>
-                            <td style="color:var(--text-muted); font-size:0.75rem; line-height:1.4;">${hDesc}</td>
-                            <td><span class="tree-connector">${hDep}</span></td>
-                            <td style="font-weight:700; font-family:monospace;">HK$ ${item.val.toLocaleString()}</td>
-                            <td><span class="status-pill pill-${item.status}">${item.status}</span></td>
-                            <td><button class="tab-btn" style="border-color:var(--accent-danger); color:var(--accent-danger); padding:4px 8px;" onclick="handleDeleteItem('${item.id}')">移出</button></td>
-                        </tr>
-                    `;
-                    gridTbody.insertAdjacentHTML('beforeend', rowHtml);
-                }
-            });
-
-            if (systemState.view === "trends") buildTrueDependencyTree();
-            if (systemState.view === "report") renderReportView(layerBudgets);
-
-            if(document.getElementById('c-backlog')) {
-                document.getElementById('c-backlog').innerText = colCounts.backlog;
-                document.getElementById('c-procure').innerText = colCounts.procure;
-                document.getElementById('c-onsite').innerText = colCounts.onsite;
-                document.getElementById('c-installed').innerText = colCounts.installed;
-            }
-
-            document.getElementById('m-budget-total').innerText = "HK$ " + userTargetBudget.toLocaleString();
-            document.getElementById('m-item-total').innerText = "HK$ " + totalItemsValue.toLocaleString();
-            document.getElementById('m-budget-cap').innerText = "HK$ " + capitalizationSpent.toLocaleString();
-            
-            const remainingBudget = userTargetBudget - totalItemsValue;
-            const barNode = document.getElementById('sandbox-financial-bar');
-            if (remainingBudget >= 0) {
-                barNode.innerHTML = `<span>🟢 <strong>幾何與財務大盤聯動：</strong> 當前排產未超載。大盤賸餘空間：<strong style="color:var(--accent-success)">HK$ ${remainingBudget.toLocaleString()}</strong></span>`;
-                barNode.style.borderColor = "var(--border-color)";
-            } else {
-                barNode.innerHTML = `<span>⚠️ <strong>空間/預算超載預警：</strong> 已超出目標預算！赤字缺口：<strong style="color:var(--accent-danger)">HK$ ${Math.abs(remainingBudget).toLocaleString()}</strong></span>`;
-                barNode.style.borderColor = "var(--accent-danger)";
-            }
-
-            const globalTotal = drcsMasterData.length;
-            const completionRatio = globalTotal > 0 ? ((drcsMasterData.filter(i => i.status === 'installed').length / globalTotal) * 100).toFixed(1) : "0.0";
-            document.getElementById('m-ratio').innerText = completionRatio + "%";
-            document.getElementById('m-progress').style.width = completionRatio + "%";
-            document.getElementById('m-count').innerText = `${filteredCount} / ${globalTotal}`;
-
-            const txtNode = document.getElementById('filtered-count-txt');
-            if(kw || systemState.zone !== "ALL" || systemState.status !== "ALL") {
-                txtNode.innerText = `⚙️ 過濾出 ${filteredCount} 個核心組件`;
-            } else { txtNode.innerText = ""; }
+        document.getElementById('m-budget-total').innerText = "HK$ " + userTargetBudget.toLocaleString();
+        document.getElementById('m-item-total').innerText = "HK$ " + totalItemsValue.toLocaleString();
+        document.getElementById('m-budget-cap').innerText = "HK$ " + capitalizationSpent.toLocaleString();
+        
+        const remainingBudget = userTargetBudget - totalItemsValue;
+        const barNode = document.getElementById('sandbox-financial-bar');
+        if (remainingBudget >= 0) {
+            barNode.innerHTML = `<span>🟢 <strong>幾何與財務大盤聯動：</strong> 當前排產未超載。大盤賸餘空間：<strong style="color:var(--accent-success)">HK$ ${remainingBudget.toLocaleString()}</strong></span>`;
+            barNode.style.borderColor = "var(--border-color)";
+        } else {
+            barNode.innerHTML = `<span>⚠️ <strong>空間/預算超載預警：</strong> 已超出目標預算！赤字缺口：<strong style="color:var(--accent-danger)">HK$ ${Math.abs(remainingBudget).toLocaleString()}</strong></span>`;
+            barNode.style.borderColor = "var(--accent-danger)";
         }
 
-        window.onload = () => { initStore(); };
-    </script>
+        const globalTotal = drcsMasterData.length;
+        const completionRatio = globalTotal > 0 ? ((drcsMasterData.filter(i => i.status === 'installed').length / globalTotal) * 100).toFixed(1) : "0.0";
+        document.getElementById('m-ratio').innerText = completionRatio + "%";
+        document.getElementById('m-progress').style.width = completionRatio + "%";
+        document.getElementById('m-count').innerText = `${filteredCount} / ${globalTotal}`;
+
+        const txtNode = document.getElementById('filtered-count-txt');
+        if(kw || systemState.zone !== "ALL" || systemState.status !== "ALL") {
+            txtNode.innerText = `⚙️ 過濾出 ${filteredCount} 個組件`;
+        } else { txtNode.innerText = ""; }
+    }
+
+    window.onload = () => { initStore(); };
+</script>
 </body>
 </html>
